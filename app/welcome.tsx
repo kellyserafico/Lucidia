@@ -1,35 +1,22 @@
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useRouter } from "expo-router";
 import React from "react";
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-type RootStackParamList = {
-	Login: undefined;
-	SignUp: undefined;
-	// add other routes if needed
-};
+export default function WelcomeScreen() {
+	const router = useRouter();
 
-export const unstable_settings = {
-	initialRouteName: "welcome",
-};
-
-type WelcomeScreenProps = {
-	navigation: NativeStackNavigationProp<RootStackParamList>;
-};
-
-export default function WelcomeScreen({ navigation }: WelcomeScreenProps) {
 	return (
 		<SafeAreaView style={styles.container}>
 			<StatusBar hidden />
 			<View style={styles.card}>
 				<Image source={require("../assets/images/logo.svg")} style={{ width: 100, height: 100 }} />
-
 				<Text style={styles.title}>Lucidia</Text>
 
-				<TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate("Login")}>
+				<TouchableOpacity style={styles.loginButton} onPress={() => router.push("/")}>
 					<Text style={styles.loginText}>Log In</Text>
 				</TouchableOpacity>
 
-				<TouchableOpacity style={styles.createButton} onPress={() => navigation.navigate("SignUp")}>
+				<TouchableOpacity style={styles.createButton} onPress={() => router.push("/signup")}>
 					<Text style={styles.createText}>Create Account</Text>
 				</TouchableOpacity>
 			</View>
