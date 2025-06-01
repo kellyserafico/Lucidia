@@ -1,10 +1,11 @@
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { entries } from "../../constants/entries";
 
 export default function SearchScreen() {
 	const [query, setQuery] = useState("");
-
+	const router = useRouter();
 	const now = new Date();
 	const formattedDate = now.toLocaleDateString("en-US", {
 		month: "long",
@@ -44,7 +45,7 @@ export default function SearchScreen() {
 					keyExtractor={(item) => item.id}
 					style={{ marginTop: 24 }}
 					renderItem={({ item }) => (
-						<View style={styles.entryCard}>
+						<TouchableOpacity onPress={() => router.push(`/entry/${item.id}`)} style={styles.entryCard}>
 							<Text style={styles.entryDate}>{item.date}</Text>
 							<View style={styles.entryRow}>
 								<Text style={styles.entryEmoji}>{item.mood}</Text>
@@ -55,7 +56,7 @@ export default function SearchScreen() {
 									<Text style={styles.entryTime}>{item.dayTime}</Text>
 								</View>
 							</View>
-						</View>
+						</TouchableOpacity>
 					)}
 				/>
 			</View>
