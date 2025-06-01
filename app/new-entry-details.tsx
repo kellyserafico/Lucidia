@@ -1,7 +1,7 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { addEntry } from "../constants/entries";
+import { useEntries } from "./contexts/EntriesContext";
 
 const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
 
@@ -32,6 +32,7 @@ const allTags = [
 ];
 
 export default function NewEntryDetailsScreen() {
+	const { addEntry } = useEntries();
 	const { text, date, dayTime } = useLocalSearchParams();
 	const router = useRouter();
 
@@ -44,7 +45,7 @@ export default function NewEntryDetailsScreen() {
 
 	const handleSave = () => {
 		const entry = {
-			id: new Date().toISOString(),
+			id: (Array.isArray(date) ? date[0] : date ?? "").slice(0, 10),
 			date: Array.isArray(date) ? date[0] : date ?? "",
 			dayTime: Array.isArray(dayTime) ? dayTime[0] : dayTime ?? "",
 			text: Array.isArray(text) ? text[0] : text ?? "",

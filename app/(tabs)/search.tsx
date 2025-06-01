@@ -1,9 +1,11 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { entries } from "../../constants/entries";
+import { useEntries } from "../contexts/EntriesContext";
 
 export default function SearchScreen() {
+	const { entries } = useEntries();
+
 	const [query, setQuery] = useState("");
 	const router = useRouter();
 	const now = new Date();

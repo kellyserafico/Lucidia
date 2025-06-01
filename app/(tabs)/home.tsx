@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { entries } from "../../constants/entries";
+import { useEntries } from "../contexts/EntriesContext";
 
 interface Week extends Array<number | null> {}
 type Weeks = Week[];
@@ -14,6 +14,7 @@ interface Entry {
 }
 
 export default function HomeScreen() {
+	const { entries } = useEntries();
 	const router = useRouter();
 	const today = new Date();
 	const [displayedMonth, setDisplayedMonth] = useState(today.getMonth());
@@ -23,6 +24,35 @@ export default function HomeScreen() {
 		month: today.getMonth(),
 		day: today.getDate(),
 	});
+
+	function generateWeeksForMonth(year: number, month: number): Weeks {
+		const firstDay = new Date(year, month, 1);
+		const lastDay = new Date(year, month + 1, 0);
+		const totalDays = lastDay.getDate();
+
+		const weeks: Weeks = [];
+		let week: Week = new Array(7).fill(null);
+		let day = 1;
+
+		for (let i = 0; i < firstDay.getDay(); i++) {
+			week[i] = null;
+		}
+
+		for (let i = firstDay.getDay(); i < 7; i++) {
+			week[i] = day++;
+		}
+		weeks.push([...week]);
+
+		while (day <= totalDays) {
+			week = new Array(7).fill(null);
+			for (let i = 0; i < 7 && day <= totalDays; i++) {
+				week[i] = day++;
+			}
+			weeks.push([...week]);
+		}
+
+		return weeks;
+	}
 
 	const getDateSuffix = (day: number) => {
 		if (day >= 11 && day <= 13) return `${day}th`;
@@ -38,8 +68,8 @@ export default function HomeScreen() {
 		}
 	};
 
-	const isPrevMonthAllowed = displayedMonth > 4;
-	const isNextMonthAllowed = displayedMonth < 5;
+	const isPrevMonthAllowed = true;
+	const isNextMonthAllowed = true;
 
 	const weeksByMonth: { [key: string]: Weeks } = {
 		"2025-4": [
@@ -57,7 +87,8 @@ export default function HomeScreen() {
 			[29, 30, null, null, null, null, null],
 		],
 	};
-	const weeks = weeksByMonth[`${displayedYear}-${displayedMonth}`] || [];
+	const weeks = generateWeeksForMonth(displayedYear, displayedMonth);
+
 	const monthName = displayedMonth === 4 ? "May" : "June";
 
 	const selectedId = `${selectedDate.year}-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(

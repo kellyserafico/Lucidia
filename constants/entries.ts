@@ -16,7 +16,7 @@ export const entries: Entry[] = [
 		date: "March 25th, 2025",
 		dayTime: "Friday | 10:00 AM",
 		mood: "😊",
-		tags: [{ label: "🌳 Forest" }, { label: "🌊 Pool of Water" }, { label: "Serene" }, { label: "Curiosity" }],
+		tags: [{ label: "Forest" }, { label: "WPool of Water" }, { label: "Serene" }, { label: "Curiosity" }],
 		text: `The dream started with me waking up in my bed. I found myself getting up from the bed, and walking into my kitchen.\nWhen I got there, I saw two of my friends. I couldn't tell who they were, but they felt like friends I would normally see in my classes. Upon seeing them, I tried to speak, but was cut off when they ran past, and disappeared behind me.\nThe scene transitioned, and I was suddenly falling from the sky. The clouds were rushing past me, but I didn't feel scared about hitting the ground. Instead, I dropped into a pool of water, and when I emerged, I was in a familiar forest from my childhood. After lifting myself from the water, I walked through the forest, observing large patches of bright red mushrooms along the trails.`,
 	},
 	// April entries
