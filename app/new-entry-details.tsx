@@ -1,20 +1,46 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { addEntry } from "../constants/entries";
 
 const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
 
-const defaultTags = {
-	symbols: ["🌳 Forest", "🌊 Pool of Water"],
-	emotions: ["Serene", "Curiosity"],
-};
+// Extracted all available tags (from your dataset)
+const allTags = [
+	"Forest",
+	"Pool of Water",
+	"Serene",
+	"Curiosity",
+	"Puzzle",
+	"Mystery",
+	"Chase",
+	"Escape",
+	"Funny",
+	"Friends",
+	"Adventure",
+	"Mountains",
+	"Night",
+	"Stars",
+	"Calm",
+	"Celebration",
+	"Family",
+	"Peaceful",
+	"Garden",
+	"Beach",
+	"Discovery",
+	"Excitement",
+];
 
 export default function NewEntryDetailsScreen() {
 	const { text, date, dayTime } = useLocalSearchParams();
 	const router = useRouter();
 
 	const [selectedMood, setSelectedMood] = useState("😊");
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+	const toggleTag = (tag: string) => {
+		setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+	};
 
 	const handleSave = () => {
 		const entry = {
@@ -23,20 +49,19 @@ export default function NewEntryDetailsScreen() {
 			dayTime: Array.isArray(dayTime) ? dayTime[0] : dayTime ?? "",
 			text: Array.isArray(text) ? text[0] : text ?? "",
 			mood: selectedMood,
-			tags: [...defaultTags.symbols.map((label) => ({ label })), ...defaultTags.emotions.map((label) => ({ label }))],
+			tags: selectedTags.map((label) => ({ label })),
 		};
 
 		addEntry(entry);
-		router.replace("/home"); // or "/home" if you have that route
+		router.replace("/home");
 	};
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.wrapper}>
+			<ScrollView contentContainerStyle={styles.wrapper}>
 				<Text style={styles.dateText}>{date}</Text>
 				<Text style={styles.timeText}>{dayTime}</Text>
 
-				{/* Mood Selection */}
 				<Text style={styles.sectionTitle}>Mood Upon Waking</Text>
 				<View style={styles.emojiRow}>
 					{moodOptions.map((emoji) => (
@@ -50,30 +75,22 @@ export default function NewEntryDetailsScreen() {
 					))}
 				</View>
 
-				{/* Tags (symbols + emotions) */}
-				<Text style={styles.sectionTitle}>Symbols</Text>
+				<Text style={styles.sectionTitle}>Select Tags</Text>
 				<View style={styles.tagRow}>
-					{defaultTags.symbols.map((tag) => (
-						<View key={tag} style={styles.tag}>
-							<Text style={styles.tagText}>{tag}</Text>
-						</View>
-					))}
+					{allTags.map((tag) => {
+						const selected = selectedTags.includes(tag);
+						return (
+							<TouchableOpacity key={tag} onPress={() => toggleTag(tag)} style={[styles.tag, selected && styles.selectedTag]}>
+								<Text style={styles.tagText}>{tag}</Text>
+							</TouchableOpacity>
+						);
+					})}
 				</View>
 
-				<Text style={styles.sectionTitle}>Emotions within dream</Text>
-				<View style={styles.tagRow}>
-					{defaultTags.emotions.map((tag) => (
-						<View key={tag} style={styles.tag}>
-							<Text style={styles.tagText}>{tag}</Text>
-						</View>
-					))}
-				</View>
-
-				{/* Save Button */}
 				<TouchableOpacity style={styles.button} onPress={handleSave}>
 					<Text style={styles.buttonText}>Save Entry</Text>
 				</TouchableOpacity>
-			</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 }
@@ -89,6 +106,7 @@ const styles = StyleSheet.create({
 		maxWidth: 420,
 		alignSelf: "center",
 		paddingHorizontal: 24,
+		paddingBottom: 64,
 	},
 	dateText: {
 		fontSize: 22,
@@ -134,6 +152,10 @@ const styles = StyleSheet.create({
 		borderRadius: 16,
 		paddingHorizontal: 14,
 		paddingVertical: 6,
+		marginBottom: 8,
+	},
+	selectedTag: {
+		backgroundColor: "#7B5EFF",
 	},
 	tagText: {
 		color: "#fff",
