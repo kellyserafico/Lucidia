@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { entries } from "../../constants/entries";
 
 interface Week extends Array<number | null> {}
@@ -74,7 +74,7 @@ export default function HomeScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={{ flex: 1, justifyContent: "flex-start" }}>
+			<ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
 				<View style={styles.header}>
 					<Text style={styles.dateText}>{`${selectedMonthName} ${getDateSuffix(selectedDay)}, ${selectedYear}`}</Text>
 					<Text style={styles.timeText}>{selectedWeekday}</Text>
@@ -104,7 +104,7 @@ export default function HomeScreen() {
 							</Text>
 						))}
 
-						{(weeks as Weeks).map((week, wi) => (
+						{weeks.map((week, wi) => (
 							<View key={wi} style={{ flexDirection: "row", width: "100%" }}>
 								{week.map((day, i) => {
 									if (!day) return <View key={i} style={styles.emptySpace} />;
@@ -112,6 +112,7 @@ export default function HomeScreen() {
 										displayedYear > today.getFullYear() ||
 										(displayedYear === today.getFullYear() && displayedMonth > today.getMonth()) ||
 										(displayedYear === today.getFullYear() && displayedMonth === today.getMonth() && day > today.getDate());
+
 									const dateId = `${displayedYear}-${String(displayedMonth + 1).padStart(2, "0")}-${String(day).padStart(
 										2,
 										"0"
@@ -119,6 +120,7 @@ export default function HomeScreen() {
 									const hasEntry = entries.some((e) => e.id === dateId);
 									const isSelected =
 										selectedDate.year === displayedYear && selectedDate.month === displayedMonth && selectedDate.day === day;
+
 									return (
 										<TouchableOpacity
 											key={i}
@@ -160,7 +162,7 @@ export default function HomeScreen() {
 				) : (
 					<Text style={styles.noEntryText}>There are no entries for this day</Text>
 				)}
-			</View>
+			</ScrollView>
 
 			<View style={styles.addEntryBtnContainer}>
 				<TouchableOpacity style={styles.addEntryBtn} onPress={() => router.push("/new-entry")}>
@@ -175,7 +177,7 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#2C1E57",
-		paddingTop: 96,
+		paddingTop: Platform.OS === "android" ? 40 : 0,
 	},
 	header: {
 		paddingHorizontal: 24,
