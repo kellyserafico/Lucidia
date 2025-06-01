@@ -3,11 +3,19 @@ import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { entries } from "../../constants/entries";
 
+const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
+
 export default function EditTextScreen() {
 	const router = useRouter();
 	const { id } = useLocalSearchParams();
 	const entry = entries.find((e) => e.id === id);
+
 	const [text, setText] = useState(entry ? entry.text : "");
+	const [selectedMood, setSelectedMood] = useState(entry ? entry.mood : "😊");
+	const [selectedTags, setSelectedTags] = useState(entry ? entry.tags.map((t) => t.label) : []);
+
+	// All unique tags from all entries
+	const allTags = Array.from(new Set(entries.flatMap((e) => e.tags.map((t) => t.label))));
 
 	if (!entry) {
 		return (
@@ -17,6 +25,10 @@ export default function EditTextScreen() {
 		);
 	}
 
+	const toggleTag = (tag: string) => {
+		setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+	};
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<KeyboardAvoidingView
@@ -25,11 +37,25 @@ export default function EditTextScreen() {
 				keyboardVerticalOffset={64}
 			>
 				<View style={styles.contentWrapper}>
-					{/* Header */}
 					<Text style={styles.date}>{entry.date}</Text>
 					<Text style={styles.dayTime}>{entry.dayTime}</Text>
 
-					{/* Text Input Card */}
+					{/* Mood Selection */}
+					<Text style={styles.sectionTitle}>Mood</Text>
+					<View style={styles.emojiRow}>
+						{moodOptions.map((emoji) => (
+							<TouchableOpacity
+								key={emoji}
+								onPress={() => setSelectedMood(emoji)}
+								style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
+							>
+								<Text style={styles.emoji}>{emoji}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+
+					{/* Editable Text */}
+					<Text style={styles.sectionTitle}>Dream Description</Text>
 					<View style={styles.card}>
 						<TextInput
 							style={styles.textInput}
@@ -39,14 +65,36 @@ export default function EditTextScreen() {
 							placeholder="Type your dream entry here..."
 							placeholderTextColor="#bbb"
 							textAlignVertical="top"
-							autoFocus={false}
 						/>
 					</View>
+
+					{/* Tags */}
+					<Text style={styles.sectionTitle}>Tags</Text>
+					<View style={styles.tagRow}>
+						{allTags.map((tag) => (
+							<TouchableOpacity
+								key={tag}
+								style={[styles.tag, selectedTags.includes(tag) && styles.selectedTag]}
+								onPress={() => toggleTag(tag)}
+							>
+								<Text style={styles.tagText}>{tag}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
 				</View>
-				{/* Next Button (absolute at bottom) */}
+
+				{/* Save Button */}
 				<View style={styles.nextBtnContainer}>
-					<TouchableOpacity style={styles.nextBtn} onPress={() => router.back()}>
-						<Text style={styles.nextBtnText}>Next</Text>
+					<TouchableOpacity
+						style={styles.nextBtn}
+						onPress={() => {
+							entry.text = text;
+							entry.mood = selectedMood;
+							entry.tags = selectedTags.map((label) => ({ label }));
+							router.back();
+						}}
+					>
+						<Text style={styles.nextBtnText}>Save & Back</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -58,7 +106,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#4B378D",
-		paddingHorizontal: 0,
 	},
 	contentWrapper: {
 		marginTop: 32,
@@ -69,34 +116,69 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		fontWeight: "bold",
 		marginBottom: 2,
-		marginLeft: 2,
 	},
 	dayTime: {
 		color: "#d6d6f7",
 		fontSize: 16,
 		marginBottom: 18,
-		marginLeft: 2,
+	},
+	sectionTitle: {
+		color: "#fff",
+		fontSize: 16,
+		fontWeight: "bold",
+		marginTop: 12,
+		marginBottom: 8,
+	},
+	emojiRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: 12,
+	},
+	emojiButton: {
+		padding: 6,
+		borderRadius: 12,
+	},
+	selectedEmoji: {
+		backgroundColor: "#7B5EFF",
+	},
+	emoji: {
+		fontSize: 28,
 	},
 	card: {
 		backgroundColor: "#2D2266",
 		borderRadius: 18,
 		padding: 16,
-		marginTop: 8,
 		marginBottom: 24,
 		shadowColor: "#000",
 		shadowOffset: { width: 0, height: 8 },
 		shadowOpacity: 0.18,
 		shadowRadius: 24,
 		elevation: 8,
-		minHeight: 220,
+		minHeight: 180,
 	},
 	textInput: {
 		color: "#fff",
 		fontSize: 16,
-		minHeight: 180,
-		maxHeight: 320,
 		textAlignVertical: "top",
-		padding: 0,
+	},
+	tagRow: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		gap: 8,
+	},
+	tag: {
+		backgroundColor: "#3D2A74",
+		borderRadius: 16,
+		paddingHorizontal: 14,
+		paddingVertical: 6,
+		marginBottom: 8,
+	},
+	selectedTag: {
+		backgroundColor: "#7B5EFF",
+	},
+	tagText: {
+		color: "#fff",
+		fontSize: 14,
 	},
 	nextBtnContainer: {
 		position: "absolute",
@@ -112,11 +194,6 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		paddingVertical: 14,
 		alignItems: "center",
-		marginHorizontal: 0,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.08,
-		shadowRadius: 8,
 	},
 	nextBtnText: {
 		color: "#fff",
