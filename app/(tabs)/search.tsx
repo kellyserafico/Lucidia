@@ -45,7 +45,10 @@ export default function SearchScreen() {
 					keyExtractor={(item) => item.id}
 					style={{ marginTop: 24 }}
 					renderItem={({ item }) => (
-						<TouchableOpacity onPress={() => router.push(`/entry/${item.id}`)} style={styles.entryCard}>
+						<TouchableOpacity
+							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: item.id } })}
+							style={styles.entryCard}
+						>
 							<Text style={styles.entryDate}>{item.date}</Text>
 							<View style={styles.entryRow}>
 								<Text style={styles.entryEmoji}>{item.mood}</Text>
