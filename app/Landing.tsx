@@ -1,142 +1,143 @@
-import { useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
-import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useRouter } from "expo-router";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Landing() {
-  const [showUserPage, setshowUserPage] = useState(false);
-  const titleFadeStart = useRef(new Animated.Value(1)).current;
-  const titleFadeUpStart = useRef(new Animated.Value(0)).current;
-  const userPageFadeStart = useRef(new Animated.Value(0)).current;
-  const router = useRouter();
+	const [showUserPage, setshowUserPage] = useState(false);
+	const titleFadeStart = useRef(new Animated.Value(1)).current;
+	const titleFadeUpStart = useRef(new Animated.Value(0)).current;
+	const userPageFadeStart = useRef(new Animated.Value(0)).current;
+	const router = useRouter();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(titleFadeStart, {
-          toValue: 0,
-          duration: 200,
-          useNativeDriver: true,
-        }),
-        Animated.timing(titleFadeUpStart, {
-          toValue: -50,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        setshowUserPage(true);
-        Animated.timing(userPageFadeStart, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }).start();
-      });
-    }, 1000);
-    return () => clearTimeout(timeout);
-  });
+	useEffect(() => {
+		const timeout = setTimeout(() => {
+			Animated.parallel([
+				Animated.timing(titleFadeStart, {
+					toValue: 0,
+					duration: 200,
+					useNativeDriver: true,
+				}),
+				Animated.timing(titleFadeUpStart, {
+					toValue: -50,
+					duration: 500,
+					useNativeDriver: true,
+				}),
+			]).start(() => {
+				setshowUserPage(true);
+				Animated.timing(userPageFadeStart, {
+					toValue: 1,
+					duration: 500,
+					useNativeDriver: true,
+				}).start();
+			});
+		}, 1000);
+		return () => clearTimeout(timeout);
+	});
 
-  return (
-    <View style={styles.container}>
-      {!showUserPage && (
-        <Animated.View
-          style={{
-            opacity: titleFadeStart,
-            transform: [{ translateY: titleFadeUpStart }],
-            position: 'absolute',
-            width: '100%',
-            alignItems: 'center',
-          }}>
-          <Text style={styles.welcome}>Welcome to</Text>
-          <Text style={styles.lucidia}>Lucidia</Text>
-        </Animated.View>
-      )}
+	return (
+		<View style={styles.container}>
+			{!showUserPage && (
+				<Animated.View
+					style={{
+						opacity: titleFadeStart,
+						transform: [{ translateY: titleFadeUpStart }],
+						position: "absolute",
+						width: "100%",
+						alignItems: "center",
+					}}
+				>
+					<Text style={styles.welcome}>Welcome to</Text>
+					<Text style={styles.lucidia}>Lucidia</Text>
+				</Animated.View>
+			)}
 
-      {showUserPage && (
-        <Animated.View style={[styles.userPageCard, { opacity: userPageFadeStart }]}> 
-          <Image source={require('../assets/images/akar-icons_moon.png')} style={{ width: 80, height: 80, marginBottom: 16 }}/>
-          <Text style={styles.lucidiaCard}>Lucidia</Text>
+			{showUserPage && (
+				<Animated.View style={[styles.userPageCard, { opacity: userPageFadeStart }]}>
+					<Image source={require("../assets/images/akar-icons_moon.png")} style={{ width: 80, height: 80, marginBottom: 16 }} />
+					<Text style={styles.lucidiaCard}>Lucidia</Text>
 
-          <TouchableOpacity style={styles.loginBtn} activeOpacity={0.8} onPress={() => router.push('/(tabs)/home')}>
-            <Text style={styles.loginBtnText}>Log In</Text>
-          </TouchableOpacity>
+					<TouchableOpacity style={styles.loginBtn} activeOpacity={0.8} onPress={() => router.push("/login")}>
+						<Text style={styles.loginBtnText}>Log In</Text>
+					</TouchableOpacity>
 
-          <TouchableOpacity style={styles.createBtn} activeOpacity={0.8} onPress={() => router.push('/SignUp')}>
-            <Text style={styles.createBtnText}>Create Account</Text>
-          </TouchableOpacity>
-        </Animated.View>
-      )}
-    </View>
-  );
+					<TouchableOpacity style={styles.createBtn} activeOpacity={0.8} onPress={() => router.push("/SignUp")}>
+						<Text style={styles.createBtnText}>Create Account</Text>
+					</TouchableOpacity>
+				</Animated.View>
+			)}
+		</View>
+	);
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#4B378D',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  
-  welcome: {
-    color: 'white',
-    fontSize: 32,
-    textAlign: 'center',
-    fontWeight: '300',
-    marginBottom: 8,
-    fontFamily: 'System',
-  },
+	container: {
+		flex: 1,
+		backgroundColor: "#4B378D",
+		justifyContent: "center",
+		alignItems: "center",
+	},
 
-  lucidia: {
-    color: 'white',
-    fontSize: 56,
-    textAlign: 'center',
-    fontFamily: 'ShortStack',
-  },
+	welcome: {
+		color: "white",
+		fontSize: 32,
+		textAlign: "center",
+		fontWeight: "300",
+		marginBottom: 8,
+		fontFamily: "System",
+	},
 
-  userPageCard: {
-    width: '90%',
-    maxWidth: 400,
-    backgroundColor: '#2D2266',
-    borderRadius: 32,
-    alignItems: 'center',
-    paddingVertical: 40,
-    paddingHorizontal: 20,
-  },
+	lucidia: {
+		color: "white",
+		fontSize: 56,
+		textAlign: "center",
+		fontFamily: "ShortStack",
+	},
 
-  lucidiaCard: {
-    color: 'white',
-    fontSize: 48,
-    fontFamily: 'ShortStack',
-    marginBottom: 32,
-    marginTop: 8,
-  },
+	userPageCard: {
+		width: "90%",
+		maxWidth: 400,
+		backgroundColor: "#2D2266",
+		borderRadius: 32,
+		alignItems: "center",
+		paddingVertical: 40,
+		paddingHorizontal: 20,
+	},
 
-  loginBtn: {
-    width: '100%',
-    backgroundColor: '#6B5DD3',
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginBottom: 18,
-  },
+	lucidiaCard: {
+		color: "white",
+		fontSize: 48,
+		fontFamily: "ShortStack",
+		marginBottom: 32,
+		marginTop: 8,
+	},
 
-  loginBtnText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '400',
-  },
+	loginBtn: {
+		width: "100%",
+		backgroundColor: "#6B5DD3",
+		borderRadius: 8,
+		paddingVertical: 14,
+		alignItems: "center",
+		marginBottom: 18,
+	},
 
-  createBtn: {
-    width: '100%',
-    borderColor: '#B6A8F7',
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
+	loginBtnText: {
+		color: "white",
+		fontSize: 18,
+		fontWeight: "400",
+	},
 
-  createBtnText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: '400',
-  },
-}); 
+	createBtn: {
+		width: "100%",
+		borderColor: "#B6A8F7",
+		borderWidth: 1.5,
+		borderRadius: 8,
+		paddingVertical: 14,
+		alignItems: "center",
+	},
+
+	createBtnText: {
+		color: "white",
+		fontSize: 18,
+		fontWeight: "400",
+	},
+});
