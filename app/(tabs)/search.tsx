@@ -106,10 +106,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 		fontSize: 16,
 		color: "#fff",
-		shadowColor: "#000",
-		shadowOpacity: 0.2,
-		shadowRadius: 6,
-		shadowOffset: { width: 0, height: 2 },
 	},
 	listContent: {
 		paddingHorizontal: 24,

@@ -8,7 +8,7 @@ export default function HomeScreen() {
 	const router = useRouter();
 	const { entries } = useEntries();
 	const today = new Date();
-	const [displayedMonthNum, setdisplayedMonthNum] = useState(today.getMonth());
+	const [displayedMonthNum, setDisplayedMonthNum] = useState(today.getMonth());
 	const [selectedDate, setSelectedDate] = useState({
 		year: today.getFullYear(),
 		month: today.getMonth(),
@@ -30,14 +30,14 @@ export default function HomeScreen() {
 		[29, 30, null, null, null, null, null]
 	];
 	const weeks = displayedMonthNum === 4 ? weeksForMay : weeksForJune;
-	const selectedId = `2025-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(2, "0")}`;
+	const selectedId = `${selectedDate.year}-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(2, "0")}`;
 	const selectedEntry = entries.find((e) => e.id === selectedId);
 	const selectedMonth = displayedMonthNum === 4 ? "May" : "June";
 	const selectedDay = selectedDate.day;
 	const selectedWeekday = new Date(selectedDate.year, selectedDate.month, selectedDate.day).toLocaleDateString("en-US", { weekday: "long" });
 
 	const getDateEndString = (day: number) => {
-		if (day < 4 || day > 20) {
+		if (day > 4 && day < 20) {
 			return `${day}th`;
 		} else if (day % 10 === 1) {
 			return `${day}st`;
@@ -55,7 +55,7 @@ export default function HomeScreen() {
 			<SafeAreaView style={styles.container}>
 				<ScrollView>
 					<View style={styles.header}>
-						<Text style={styles.dateText}>{`${selectedMonth} ${getDateEndString(selectedDay)}, 2025`}</Text>
+						<Text style={styles.dateText}>{`${selectedMonth} ${getDateEndString(selectedDay)}, ${selectedDate.year}`}</Text>
 						<Text style={styles.timeText}>{selectedWeekday}</Text>
 					</View>
 
@@ -63,14 +63,14 @@ export default function HomeScreen() {
 						<TouchableOpacity
 							style={[styles.arrowBtn, styles.arrowLeft, displayedMonthNum === 4 && styles.arrowBtnDisabled]}
 							disabled={displayedMonthNum === 4}
-							onPress={() => setdisplayedMonthNum(displayedMonthNum - 1)}>
+							onPress={() => setDisplayedMonthNum(displayedMonthNum - 1)}>
 							<Text style={styles.arrowText}>{"‹"}</Text>
 						</TouchableOpacity>
 
 						<TouchableOpacity
 							style={[styles.arrowBtn, styles.arrowRight, displayedMonthNum === 5 && styles.arrowBtnDisabled]}
 							disabled={displayedMonthNum === 5}
-							onPress={() => setdisplayedMonthNum(displayedMonthNum + 1)}>
+							onPress={() => setDisplayedMonthNum(displayedMonthNum + 1)}>
 							<Text style={styles.arrowText}>{"›"}</Text>
 						</TouchableOpacity>
 

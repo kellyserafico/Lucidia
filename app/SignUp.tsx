@@ -149,10 +149,6 @@ const styles = StyleSheet.create({
 		borderRadius: 14,
 		alignItems: "center",
 		marginHorizontal: 16,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 4,
 	},
 
 	buttonText: {
@@ -178,10 +174,6 @@ const styles = StyleSheet.create({
 		marginHorizontal: 16,
 		height: 70,
 		justifyContent: 'center',
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.2,
-		shadowRadius: 4,
 	},
 
 	reminderBtnText: {
