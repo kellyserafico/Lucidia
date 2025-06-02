@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -33,51 +34,52 @@ export default function SearchScreen() {
 	});
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
-				<View style={styles.contentWrapper}>
-					<Text style={styles.dateText}>{formattedDate}</Text>
-					<TextInput
-						style={styles.searchInput}
-						placeholder="Search..."
-						placeholderTextColor="#aaa"
-						value={query}
-						onChangeText={setQuery}
-					/>
-				</View>
-				<FlatList
-					contentContainerStyle={styles.listContent}
-					data={[...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
-					keyExtractor={(item) => item.id}
-					renderItem={({ item }) => (
-						<TouchableOpacity
-							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: item.id } })}
-							style={styles.entryCard}
-						>
-							<Text style={styles.entryDate}>{item.date}</Text>
-							<View style={styles.entryRow}>
-								<Text style={styles.entryEmoji}>{item.mood}</Text>
-								<View>
-									<Text style={styles.entryTitle} numberOfLines={1}>
-										{item.text.split("\n")[0].slice(0, 32)}
-										{item.text.split("\n")[0].length > 32 ? "…" : ""}
-									</Text>
-									<Text style={styles.entryTime}>{item.dayTime}</Text>
+		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
+				<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+					<View style={styles.contentWrapper}>
+						<Text style={styles.dateText}>{formattedDate}</Text>
+						<TextInput
+							style={styles.searchInput}
+							placeholder="Search..."
+							placeholderTextColor="#aaa"
+							value={query}
+							onChangeText={setQuery}
+						/>
+					</View>
+					<FlatList
+						contentContainerStyle={styles.listContent}
+						data={[...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
+						keyExtractor={(item) => item.id}
+						renderItem={({ item }) => (
+							<TouchableOpacity
+								onPress={() => router.push({ pathname: "/entry/[id]", params: { id: item.id } })}
+								style={styles.entryCard}
+							>
+								<Text style={styles.entryDate}>{item.date}</Text>
+								<View style={styles.entryRow}>
+									<Text style={styles.entryEmoji}>{item.mood}</Text>
+									<View>
+										<Text style={styles.entryTitle} numberOfLines={1}>
+											{item.text.split("\n")[0].slice(0, 32)}
+											{item.text.split("\n")[0].length > 32 ? "…" : ""}
+										</Text>
+										<Text style={styles.entryTime}>{item.dayTime}</Text>
+									</View>
 								</View>
-							</View>
-						</TouchableOpacity>
-					)}
-					style={{ flex: 1 }}
-				/>
-			</KeyboardAvoidingView>
-		</SafeAreaView>
+							</TouchableOpacity>
+						)}
+						style={{ flex: 1 }}
+					/>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57",
 		paddingTop: 40,
 	},
 	contentWrapper: {
@@ -90,7 +92,7 @@ const styles = StyleSheet.create({
 		fontSize: 22,
 		fontWeight: "bold",
 		color: "#fff",
-		marginBottom: 4,
+		marginBottom: 16,
 	},
 	timeText: {
 		fontSize: 14,
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
 		marginBottom: 24,
 	},
 	searchInput: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 16,
 		paddingVertical: 12,
 		paddingHorizontal: 16,
@@ -115,7 +117,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 24,
 	},
 	entryCard: {
-		backgroundColor: "#443072",
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 12,
 		padding: 12,
 		marginBottom: 16,

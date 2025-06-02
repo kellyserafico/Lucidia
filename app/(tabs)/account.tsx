@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Switch, Text, TouchableOpacity, View } from "react-native";
 
@@ -18,60 +19,61 @@ export default function AccountScreen() {
 	const [darkModeEnabled, setDarkModeEnabled] = useState(false);
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.contentWrapper}>
-				<Text style={styles.dateText}>{formattedDate}</Text>
-				<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
+		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
+				<View style={styles.contentWrapper}>
+					<Text style={styles.dateText}>{formattedDate}</Text>
+					<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
 
-				<View style={styles.profileCard}>
-					<Text style={styles.profileEmoji}>👤</Text>
-					<Text style={styles.username}>Peter Anteater</Text>
-				</View>
-
-				<View style={styles.settingsSection}>
-					<Text style={styles.sectionTitle}>Settings</Text>
-
-					<TouchableOpacity style={styles.settingRow}>
-						<Text style={styles.settingText}>Edit Profile</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity style={styles.settingRow}>
-						<Text style={styles.settingText}>Change Password</Text>
-					</TouchableOpacity>
-
-					<View style={styles.settingRow}>
-						<Text style={styles.settingText}>Notifications</Text>
-						<Switch
-							value={notificationsEnabled}
-							onValueChange={setNotificationsEnabled}
-							thumbColor={notificationsEnabled ? "#7B5EFF" : "#888"}
-							trackColor={{ false: "#555", true: "#9C8CFF" }}
-						/>
+					<View style={styles.profileCard}>
+						<Text style={styles.profileEmoji}>👤</Text>
+						<Text style={styles.username}>Peter Anteater</Text>
 					</View>
 
-					<View style={styles.settingRow}>
-						<Text style={styles.settingText}>Dark Mode</Text>
-						<Switch
-							value={darkModeEnabled}
-							onValueChange={setDarkModeEnabled}
-							thumbColor={darkModeEnabled ? "#7B5EFF" : "#888"}
-							trackColor={{ false: "#555", true: "#9C8CFF" }}
-						/>
+					<View style={styles.settingsSection}>
+						<Text style={styles.sectionTitle}>Settings</Text>
+
+						<TouchableOpacity style={styles.settingRow}>
+							<Text style={styles.settingText}>Edit Profile</Text>
+						</TouchableOpacity>
+
+						<TouchableOpacity style={styles.settingRow}>
+							<Text style={styles.settingText}>Change Password</Text>
+						</TouchableOpacity>
+
+						<View style={styles.settingRow}>
+							<Text style={styles.settingText}>Notifications</Text>
+							<Switch
+								value={notificationsEnabled}
+								onValueChange={setNotificationsEnabled}
+								thumbColor={notificationsEnabled ? "#7B5EFF" : "#888"}
+								trackColor={{ false: "#555", true: "#9C8CFF" }}
+							/>
+						</View>
+
+						<View style={styles.settingRow}>
+							<Text style={styles.settingText}>Dark Mode</Text>
+							<Switch
+								value={darkModeEnabled}
+								onValueChange={setDarkModeEnabled}
+								thumbColor={darkModeEnabled ? "#7B5EFF" : "#888"}
+								trackColor={{ false: "#555", true: "#9C8CFF" }}
+							/>
+						</View>
 					</View>
+		
+					<TouchableOpacity style={[styles.button, styles.logoutButton]}>
+						<Text style={[styles.buttonText, { color: "#ff8c8c" }]}>Log Out</Text>
+					</TouchableOpacity>
 				</View>
-	
-				<TouchableOpacity style={[styles.button, styles.logoutButton]}>
-					<Text style={[styles.buttonText, { color: "#ff8c8c" }]}>Log Out</Text>
-				</TouchableOpacity>
-			</View>
-		</SafeAreaView>
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57",
 		paddingTop: 40,
 	},
 	contentWrapper: {
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
 		marginBottom: 24,
 	},
 	profileCard: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 16,
 		padding: 24,
 		alignItems: "center",
@@ -117,7 +119,7 @@ const styles = StyleSheet.create({
 		marginBottom: 12,
 	},
 	settingRow: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 12,
 		paddingVertical: 14,
 		paddingHorizontal: 16,

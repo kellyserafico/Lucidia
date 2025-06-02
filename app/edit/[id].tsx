@@ -1,3 +1,5 @@
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -18,7 +20,7 @@ export default function EditTextScreen() {
 
 	if (!entry) {
 		return (
-			<SafeAreaView style={styles.container}>
+			<SafeAreaView style={{ flex: 1 }}>
 				<Text style={styles.date}>Entry not found.</Text>
 			</SafeAreaView>
 		);
@@ -29,84 +31,91 @@ export default function EditTextScreen() {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<KeyboardAvoidingView
-				style={{ flex: 1 }}
-				behavior={Platform.OS === "ios" ? "padding" : undefined}
-				keyboardVerticalOffset={64}
-			>
-				<View style={styles.contentWrapper}>
-					<Text style={styles.date}>{entry.date}</Text>
-					<Text style={styles.dayTime}>{entry.dayTime}</Text>
+		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
+			<SafeAreaView style={{ flex: 1 }}>
+				<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+					<Ionicons name="chevron-back" size={32} color="#fff" />
+				</TouchableOpacity>
+				<KeyboardAvoidingView
+					style={{ flex: 1 }}
+					behavior={Platform.OS === "ios" ? "padding" : undefined}
+					keyboardVerticalOffset={64}
+				>
+					<View style={styles.contentWrapper}>
+						<Text style={styles.date}>{entry.date}</Text>
+						<Text style={styles.dayTime}>{entry.dayTime}</Text>
 
-					<Text style={styles.sectionTitle}>Mood</Text>
-					<View style={styles.emojiRow}>
-						{moodOptions.map((emoji) => (
-							<TouchableOpacity
-								key={emoji}
-								onPress={() => setSelectedMood(emoji)}
-								style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
-							>
-								<Text style={styles.emoji}>{emoji}</Text>
-							</TouchableOpacity>
-						))}
-					</View>
+						<Text style={styles.sectionTitle}>Mood</Text>
+						<View style={styles.emojiRow}>
+							{moodOptions.map((emoji) => (
+								<TouchableOpacity
+									key={emoji}
+									onPress={() => setSelectedMood(emoji)}
+									style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
+								>
+									<Text style={styles.emoji}>{emoji}</Text>
+								</TouchableOpacity>
+							))}
+						</View>
 
-					<Text style={styles.sectionTitle}>Dream Description</Text>
-					<View style={{ flex: 1 }}>
-						<View style={[styles.card, { flex: 1, minHeight: 180 }]}>
-							<TextInput
-								style={[styles.textInput, { flex: 1 }]}
-								value={text}
-								onChangeText={setText}
-								multiline
-								placeholder="Type your dream entry here..."
-								placeholderTextColor="#bbb"
-								textAlignVertical="top"
-								scrollEnabled
-							/>
+						<Text style={styles.sectionTitle}>Dream Description</Text>
+						<View style={{ flex: 1 }}>
+							<View style={[styles.inputBox, { flex: 1, minHeight: 180 }]}>
+								<TextInput
+									style={[styles.textInput, { flex: 1 }]}
+									value={text}
+									onChangeText={setText}
+									multiline
+									placeholder="Type your dream entry here..."
+									placeholderTextColor="#bbb"
+									textAlignVertical="top"
+									scrollEnabled
+								/>
+							</View>
+						</View>
+
+						<Text style={styles.sectionTitle}>Tags</Text>
+						<View style={styles.tagRow}>
+							{allTags.map((tag) => (
+								<TouchableOpacity
+									key={tag}
+									style={[styles.tag, selectedTags.includes(tag) && styles.selectedTag]}
+									onPress={() => toggleTag(tag)}
+								>
+									<Text style={styles.tagText}>{tag}</Text>
+								</TouchableOpacity>
+							))}
 						</View>
 					</View>
 
-					<Text style={styles.sectionTitle}>Tags</Text>
-					<View style={styles.tagRow}>
-						{allTags.map((tag) => (
-							<TouchableOpacity
-								key={tag}
-								style={[styles.tag, selectedTags.includes(tag) && styles.selectedTag]}
-								onPress={() => toggleTag(tag)}
-							>
-								<Text style={styles.tagText}>{tag}</Text>
-							</TouchableOpacity>
-						))}
+					<View style={styles.nextBtnContainer}>
+						<TouchableOpacity
+							style={styles.nextBtn}
+							onPress={() => {
+								entry.text = text;
+								entry.mood = selectedMood;
+								entry.tags = selectedTags.map((label) => ({ label }));
+								router.back();
+							}}
+						>
+							<Text style={styles.nextBtnText}>Save & Back</Text>
+						</TouchableOpacity>
 					</View>
-				</View>
-
-				<View style={styles.nextBtnContainer}>
-					<TouchableOpacity
-						style={styles.nextBtn}
-						onPress={() => {
-							entry.text = text;
-							entry.mood = selectedMood;
-							entry.tags = selectedTags.map((label) => ({ label }));
-							router.back();
-						}}
-					>
-						<Text style={styles.nextBtnText}>Save & Back</Text>
-					</TouchableOpacity>
-				</View>
-			</KeyboardAvoidingView>
-		</SafeAreaView>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#4B378D",
+	backBtn: {
+		position: "absolute",
+		left: 20,
+		top: 24,
+		zIndex: 10,
 	},
 	contentWrapper: {
-		marginTop: 32,
+		marginTop: 70,
 		paddingHorizontal: 24,
 	},
 	date: {
@@ -142,8 +151,8 @@ const styles = StyleSheet.create({
 	emoji: {
 		fontSize: 28,
 	},
-	card: {
-		backgroundColor: "#2D2266",
+	inputBox: {
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 18,
 		padding: 16,
 		marginBottom: 24,
@@ -161,10 +170,10 @@ const styles = StyleSheet.create({
 		gap: 8,
 	},
 	tag: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "#rgba(0,10,69,0.50)",
 		borderRadius: 16,
 		paddingHorizontal: 14,
-		paddingVertical: 6,
+		paddingVertical: 16,
 		marginBottom: 8,
 	},
 	selectedTag: {
