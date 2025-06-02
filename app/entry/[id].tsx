@@ -2,14 +2,14 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getEntryById } from "../../constants/entries";
+import { useEntries } from "../contexts/EntriesContext";
 
 export default function EntryViewScreen() {
 	const router = useRouter();
 	const { id } = useLocalSearchParams();
 
-	// Find the entry by id
-	const entry = getEntryById(id as string);
+	const { entries } = useEntries();
+	const entry = entries.find(e => e.id === id);
 
 	if (!entry) {
 		return (
