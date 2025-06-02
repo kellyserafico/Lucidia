@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import { entries as defaultEntries } from "../../constants/entries";
-import { Entry } from "../types/Entry"; // Make sure to define this if you haven't
+import { Entry } from "../types/Entry";
 
 interface EntriesContextType {
 	entries: Entry[];

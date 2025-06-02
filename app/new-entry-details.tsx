@@ -5,7 +5,6 @@ import { useEntries } from "./contexts/EntriesContext";
 
 const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
 
-// Extracted all available tags (from your dataset)
 const allTags = [
 	"Forest",
 	"Pool of Water",
@@ -32,9 +31,9 @@ const allTags = [
 ];
 
 export default function NewEntryDetailsScreen() {
-	const { addEntry } = useEntries();
 	const { text, date, dayTime } = useLocalSearchParams();
 	const router = useRouter();
+	const { addEntry } = useEntries();
 
 	const [selectedMood, setSelectedMood] = useState("😊");
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -44,8 +43,10 @@ export default function NewEntryDetailsScreen() {
 	};
 
 	const handleSave = () => {
+		const dateObj = new Date(Array.isArray(date) ? date[0] : date ?? "");
+		const id = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
 		const entry = {
-			id: (Array.isArray(date) ? date[0] : date ?? "").slice(0, 10),
+			id,
 			date: Array.isArray(date) ? date[0] : date ?? "",
 			dayTime: Array.isArray(dayTime) ? dayTime[0] : dayTime ?? "",
 			text: Array.isArray(text) ? text[0] : text ?? "",

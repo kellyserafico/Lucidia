@@ -7,6 +7,7 @@ export default function NewEntryScreen() {
 	const [text, setText] = useState("");
 
 	const now = new Date();
+	const isoDate = now.toISOString().slice(0, 10); // 'YYYY-MM-DD'
 	const formattedDate = now.toLocaleDateString("en-US", {
 		month: "long",
 		day: "numeric",
@@ -22,7 +23,7 @@ export default function NewEntryScreen() {
 		// Replace with actual save + navigate to tag/mood step
 		router.push({
 			pathname: "/new-entry-details",
-			params: { text, date: formattedDate, dayTime: `${weekday} | ${time}` },
+			params: { text, date: isoDate, dayTime: `${weekday} | ${time}` },
 		});
 	};
 

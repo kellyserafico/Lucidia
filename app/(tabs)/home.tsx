@@ -14,11 +14,11 @@ interface Entry {
 }
 
 export default function HomeScreen() {
-	const { entries } = useEntries();
 	const router = useRouter();
+	const { entries } = useEntries();
 	const today = new Date();
-	const [displayedMonth, setDisplayedMonth] = useState(today.getMonth());
-	const [displayedYear] = useState(today.getFullYear());
+	const [displayedMonth, setDisplayedMonth] = useState(4);
+	const [displayedYear] = useState(2025);
 	const [selectedDate, setSelectedDate] = useState({
 		year: today.getFullYear(),
 		month: today.getMonth(),
@@ -68,8 +68,8 @@ export default function HomeScreen() {
 		}
 	};
 
-	const isPrevMonthAllowed = true;
-	const isNextMonthAllowed = true;
+	const isPrevMonthAllowed = displayedMonth > 4;
+	const isNextMonthAllowed = displayedMonth < 5;
 
 	const weeksByMonth: { [key: string]: Weeks } = {
 		"2025-4": [
@@ -87,8 +87,7 @@ export default function HomeScreen() {
 			[29, 30, null, null, null, null, null],
 		],
 	};
-	const weeks = generateWeeksForMonth(displayedYear, displayedMonth);
-
+	const weeks = weeksByMonth[`${displayedYear}-${displayedMonth}`] || [];
 	const monthName = displayedMonth === 4 ? "May" : "June";
 
 	const selectedId = `${selectedDate.year}-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(
@@ -208,7 +207,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: "#2C1E57",
-		paddingTop: Platform.OS === "android" ? 40 : 0,
 	},
 	header: {
 		paddingHorizontal: 24,
@@ -230,11 +228,6 @@ const styles = StyleSheet.create({
 		paddingVertical: 28,
 		marginHorizontal: 24,
 		marginBottom: 20,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 4 },
-		shadowOpacity: 0.15,
-		shadowRadius: 10,
-		elevation: 6,
 		position: "relative",
 	},
 	calendarTitle: {
@@ -348,7 +341,7 @@ const styles = StyleSheet.create({
 	},
 	addEntryBtnContainer: {
 		paddingHorizontal: 24,
-		paddingBottom: 16,
+		paddingBottom: Platform.OS === "web" ? 24 : 80,
 		backgroundColor: "#2C1E57",
 	},
 
@@ -357,10 +350,6 @@ const styles = StyleSheet.create({
 		borderRadius: 12,
 		paddingVertical: 14,
 		alignItems: "center",
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 2 },
-		shadowOpacity: 0.08,
-		shadowRadius: 8,
 	},
 
 	addEntryBtnText: {
