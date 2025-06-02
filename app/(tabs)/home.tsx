@@ -1,3 +1,4 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -67,113 +68,117 @@ export default function HomeScreen() {
 	const selectedWeekday = selectedDateObj.toLocaleDateString("en-US", { weekday: "long" });
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-				<View style={styles.header}>
-					<Text style={styles.dateText}>{`${selectedMonthName} ${getDateSuffix(selectedDay)}, ${selectedYear}`}</Text>
-					<Text style={styles.timeText}>{selectedWeekday}</Text>
-				</View>
-
-				<View style={styles.calendarCard}>
-					<TouchableOpacity
-						style={[styles.arrowBtn, styles.arrowLeft, !isPrevMonthAllowed && styles.arrowBtnDisabled]}
-						disabled={!isPrevMonthAllowed}
-						onPress={() => setDisplayedMonth(displayedMonth - 1)}
-					>
-						<Text style={styles.arrowText}>{"‹"}</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[styles.arrowBtn, styles.arrowRight, !isNextMonthAllowed && styles.arrowBtnDisabled]}
-						disabled={!isNextMonthAllowed}
-						onPress={() => setDisplayedMonth(displayedMonth + 1)}
-					>
-						<Text style={styles.arrowText}>{"›"}</Text>
-					</TouchableOpacity>
-
-					<Text style={styles.calendarTitle}>{monthName}</Text>
-					<View style={styles.calendarGrid}>
-						{["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-							<Text key={d} style={styles.dayHeader}>
-								{d}
-							</Text>
-						))}
-
-						{weeks.map((week, wi) => (
-							<View key={wi} style={{ flexDirection: "row", width: "100%" }}>
-								{week.map((day, i) => {
-									if (!day) return <View key={i} style={styles.emptySpace} />;
-									const isFutureDate =
-										displayedYear > today.getFullYear() ||
-										(displayedYear === today.getFullYear() && displayedMonth > today.getMonth()) ||
-										(displayedYear === today.getFullYear() && displayedMonth === today.getMonth() && day > today.getDate());
-
-									const dateId = `${displayedYear}-${String(displayedMonth + 1).padStart(2, "0")}-${String(day).padStart(
-										2,
-										"0"
-									)}`;
-									const hasEntry = entries.some((e) => e.id === dateId);
-									const isSelected =
-										selectedDate.year === displayedYear && selectedDate.month === displayedMonth && selectedDate.day === day;
-
-									return (
-										<TouchableOpacity
-											key={i}
-											disabled={isFutureDate}
-											style={[
-												styles.dateTextCell,
-												isSelected && styles.selectedDay,
-												day === today.getDate() &&
-													displayedMonth === today.getMonth() &&
-													displayedYear === today.getFullYear() &&
-													styles.today,
-												isFutureDate && styles.futureDate,
-											]}
-											onPress={() => setSelectedDate({ year: displayedYear, month: displayedMonth, day })}
-										>
-											<Text style={[styles.dateTextCellText, isFutureDate && styles.futureDateText]}>{day}</Text>
-											{hasEntry && <View style={styles.dot} />}
-										</TouchableOpacity>
-									);
-								})}
-							</View>
-						))}
+		<LinearGradient
+			colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]}
+			style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
+				<ScrollView>
+					<View style={styles.header}>
+						<Text style={styles.dateText}>{`${selectedMonthName} ${getDateSuffix(selectedDay)}, ${selectedYear}`}</Text>
+						<Text style={styles.timeText}>{selectedWeekday}</Text>
 					</View>
-				</View>
 
-				{selectedEntry ? (
-					<TouchableOpacity
-						style={styles.eventCard}
-						onPress={() => router.push({ pathname: "/entry/[id]", params: { id: selectedEntry.id } })}
-					>
-						<Text style={styles.emoji}>{selectedEntry.mood}</Text>
-						<View>
-							<Text style={styles.eventTime}>
-								{selectedEntry.date} | {selectedEntry.dayTime}
-							</Text>
-							<Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
-								{((selectedEntry as any).text || "No description").slice(0, 30)}
-								...
-							</Text>
+					<View style={styles.calendarCard}>
+						<TouchableOpacity
+							style={[styles.arrowBtn, styles.arrowLeft, !isPrevMonthAllowed && styles.arrowBtnDisabled]}
+							disabled={!isPrevMonthAllowed}
+							onPress={() => setDisplayedMonth(displayedMonth - 1)}
+						>
+							<Text style={styles.arrowText}>{"‹"}</Text>
+						</TouchableOpacity>
+						<TouchableOpacity
+							style={[styles.arrowBtn, styles.arrowRight, !isNextMonthAllowed && styles.arrowBtnDisabled]}
+							disabled={!isNextMonthAllowed}
+							onPress={() => setDisplayedMonth(displayedMonth + 1)}
+						>
+							<Text style={styles.arrowText}>{"›"}</Text>
+						</TouchableOpacity>
+
+						<Text style={styles.calendarTitle}>{monthName}</Text>
+						<View style={styles.calendarGrid}>
+							{["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
+								<Text key={d} style={styles.dayHeader}>
+									{d}
+								</Text>
+							))}
+
+							{weeks.map((week, wi) => (
+								<View key={wi} style={{ flexDirection: "row", width: "100%" }}>
+									{week.map((day, i) => {
+										if (!day) return <View key={i} style={styles.emptySpace} />;
+										const isFutureDate =
+											displayedYear > today.getFullYear() ||
+											(displayedYear === today.getFullYear() && displayedMonth > today.getMonth()) ||
+											(displayedYear === today.getFullYear() && displayedMonth === today.getMonth() && day > today.getDate());
+
+										const dateId = `${displayedYear}-${String(displayedMonth + 1).padStart(2, "0")}-${String(day).padStart(
+											2,
+											"0"
+										)}`;
+										const hasEntry = entries.some((e) => e.id === dateId);
+										const isSelected =
+											selectedDate.year === displayedYear && selectedDate.month === displayedMonth && selectedDate.day === day;
+
+										return (
+											<TouchableOpacity
+												key={i}
+												disabled={isFutureDate}
+												style={[
+													styles.dateTextCell,
+													isSelected && styles.selectedDay,
+													day === today.getDate() &&
+														displayedMonth === today.getMonth() &&
+														displayedYear === today.getFullYear() &&
+														styles.today,
+													isFutureDate && styles.futureDate,
+												]}
+												onPress={() => setSelectedDate({ year: displayedYear, month: displayedMonth, day })}
+											>
+												<Text style={[styles.dateTextCellText, isFutureDate && styles.futureDateText]}>{day}</Text>
+												{hasEntry && <View style={styles.dot} />}
+											</TouchableOpacity>
+										);
+									})}
+								</View>
+							))}
 						</View>
-					</TouchableOpacity>
-				) : (
-					<Text style={styles.noEntryText}>There are no entries for this day</Text>
-				)}
-			</ScrollView>
+					</View>
 
-			<View style={styles.addEntryBtnContainer}>
-				<TouchableOpacity style={styles.addEntryBtn} onPress={() => router.push("/new-entry")}>
-					<Text style={styles.addEntryBtnText}>Add Entry</Text>
-				</TouchableOpacity>
-			</View>
-		</SafeAreaView>
+					{selectedEntry ? (
+						<TouchableOpacity
+							style={styles.eventCard}
+							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: selectedEntry.id } })}
+						>
+							<Text style={styles.emoji}>{selectedEntry.mood}</Text>
+							<View>
+								<Text style={styles.eventTime}>
+									{selectedEntry.date} | {selectedEntry.dayTime}
+								</Text>
+								<Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
+									{((selectedEntry as any).text || "No description").slice(0, 30)}
+									...
+								</Text>
+							</View>
+						</TouchableOpacity>
+					) : (
+						<Text style={styles.noEntryText}>There are no entries for this day</Text>
+					)}
+				</ScrollView>
+
+				<View style={styles.addEntryBtnContainer}>
+					<TouchableOpacity style={styles.addEntryBtn} onPress={() => router.push("/new-entry")}>
+						<Text style={styles.addEntryBtnText}>Add Entry</Text>
+					</TouchableOpacity>
+				</View>
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57",
+		paddingTop: 50,
 	},
 	header: {
 		paddingHorizontal: 24,
@@ -189,7 +194,7 @@ const styles = StyleSheet.create({
 		marginTop: 4,
 	},
 	calendarCard: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "rgba(0, 10, 69, 0.5)",
 		borderRadius: 20,
 		paddingHorizontal: 16,
 		paddingVertical: 28,
@@ -309,7 +314,6 @@ const styles = StyleSheet.create({
 	addEntryBtnContainer: {
 		paddingHorizontal: 24,
 		paddingBottom: Platform.OS === "web" ? 24 : 80,
-		backgroundColor: "#2C1E57",
 	},
 
 	addEntryBtn: {
