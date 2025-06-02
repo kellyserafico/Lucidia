@@ -8,9 +8,8 @@ export default function LoginScreen() {
 	const [password, setPassword] = useState("");
 
 	const handleLoginPress = () => {
-		// You can link this to your auth logic later
 		console.log("Login attempted:", email, password);
-		router.replace("/home"); // Pretend we're logging in
+		router.replace("/home");
 	};
 
 	return (

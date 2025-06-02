@@ -28,7 +28,6 @@ export default function AccountScreen() {
 					<Text style={styles.username}>Peter Anteater</Text>
 				</View>
 
-				{/* Settings */}
 				<View style={styles.settingsSection}>
 					<Text style={styles.sectionTitle}>Settings</Text>
 
@@ -60,8 +59,7 @@ export default function AccountScreen() {
 						/>
 					</View>
 				</View>
-
-				{/* Log Out */}
+	
 				<TouchableOpacity style={[styles.button, styles.logoutButton]}>
 					<Text style={[styles.buttonText, { color: "#ff8c8c" }]}>Log Out</Text>
 				</TouchableOpacity>

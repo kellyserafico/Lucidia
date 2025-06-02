@@ -24,13 +24,7 @@ export default function SearchScreen() {
 		day: "numeric",
 		year: "numeric",
 	});
-	const weekday = now.toLocaleDateString("en-US", { weekday: "long" });
-	const time = now.toLocaleTimeString("en-US", {
-		hour: "2-digit",
-		minute: "2-digit",
-	});
 
-	// Filter entries
 	const filteredEntries = entries.filter((entry) => {
 		const lowerQuery = query.toLowerCase();
 		return (

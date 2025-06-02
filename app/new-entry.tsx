@@ -156,10 +156,6 @@ const styles = StyleSheet.create({
 		color: "#fff",
 		height: 280,
 		textAlignVertical: "top",
-		shadowColor: "#000",
-		shadowOpacity: 0.2,
-		shadowRadius: 6,
-		shadowOffset: { width: 0, height: 2 },
 		marginBottom: 24,
 	},
 	sectionTitle: {
