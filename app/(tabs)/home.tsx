@@ -184,9 +184,12 @@ export default function HomeScreen() {
 					>
 						<Text style={styles.emoji}>{selectedEntry.mood}</Text>
 						<View>
-							<Text style={styles.eventTitle}>Walking Through Memories</Text>
 							<Text style={styles.eventTime}>
 								{selectedEntry.date} | {selectedEntry.dayTime}
+							</Text>
+							<Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
+								{((selectedEntry as any).text || "No description").slice(0, 30)}
+								...
 							</Text>
 						</View>
 					</TouchableOpacity>

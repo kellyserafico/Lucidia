@@ -1,6 +1,16 @@
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { FlatList, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+	FlatList,
+	KeyboardAvoidingView,
+	Platform,
+	SafeAreaView,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View,
+} from "react-native";
 import { useEntries } from "../contexts/EntriesContext";
 
 export default function SearchScreen() {
@@ -30,22 +40,21 @@ export default function SearchScreen() {
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.contentWrapper}>
-				<Text style={styles.dateText}>{formattedDate}</Text>
-				<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
-
-				<TextInput
-					style={styles.searchInput}
-					placeholder="Search..."
-					placeholderTextColor="#aaa"
-					value={query}
-					onChangeText={setQuery}
-				/>
-
+			<KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === "ios" ? "padding" : undefined}>
+				<View style={styles.contentWrapper}>
+					<Text style={styles.dateText}>{formattedDate}</Text>
+					<TextInput
+						style={styles.searchInput}
+						placeholder="Search..."
+						placeholderTextColor="#aaa"
+						value={query}
+						onChangeText={setQuery}
+					/>
+				</View>
 				<FlatList
-					data={filteredEntries}
+					contentContainerStyle={styles.listContent}
+					data={[...filteredEntries].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())}
 					keyExtractor={(item) => item.id}
-					style={{ marginTop: 24 }}
 					renderItem={({ item }) => (
 						<TouchableOpacity
 							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: item.id } })}
@@ -56,15 +65,17 @@ export default function SearchScreen() {
 								<Text style={styles.entryEmoji}>{item.mood}</Text>
 								<View>
 									<Text style={styles.entryTitle} numberOfLines={1}>
-										{item.text.split("\n")[0]}
+										{item.text.split("\n")[0].slice(0, 32)}
+										{item.text.split("\n")[0].length > 32 ? "…" : ""}
 									</Text>
 									<Text style={styles.entryTime}>{item.dayTime}</Text>
 								</View>
 							</View>
 						</TouchableOpacity>
 					)}
+					style={{ flex: 1 }}
 				/>
-			</View>
+			</KeyboardAvoidingView>
 		</SafeAreaView>
 	);
 }
@@ -72,7 +83,7 @@ export default function SearchScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57", // purple background
+		backgroundColor: "#2C1E57",
 		paddingTop: 40,
 	},
 	contentWrapper: {
@@ -104,7 +115,11 @@ const styles = StyleSheet.create({
 		shadowRadius: 6,
 		shadowOffset: { width: 0, height: 2 },
 	},
-
+	listContent: {
+		paddingHorizontal: 24,
+		paddingTop: 24,
+		paddingBottom: 24,
+	},
 	entryCard: {
 		backgroundColor: "#443072",
 		borderRadius: 12,
