@@ -205,20 +205,16 @@ const styles = StyleSheet.create({
 	},
 
 	reminderBtn: {
-		borderColor: "#B6A8F7",
-		borderWidth: 2,
+		backgroundColor: "#7B5EFF",
+		paddingVertical: 16,
 		borderRadius: 14,
-		paddingVertical: 18,
-		paddingHorizontal: 8,
 		alignItems: "center",
-		marginHorizontal: 8,
+		marginHorizontal: 16,
 		marginBottom: 18,
-		backgroundColor: "rgba(255,255,255,0.04)",
 	},
 
 	reminderBtnSelected: {
-		backgroundColor: "rgba(123, 94, 255, 0.18)",
-		borderColor: "#7B5EFF",
+		backgroundColor: "rgba(123, 94, 255, 0.4)",
 	},
 
 	reminderBtnText: {
