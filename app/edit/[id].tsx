@@ -56,16 +56,19 @@ export default function EditTextScreen() {
 
 					{/* Editable Text */}
 					<Text style={styles.sectionTitle}>Dream Description</Text>
-					<View style={styles.card}>
-						<TextInput
-							style={styles.textInput}
-							value={text}
-							onChangeText={setText}
-							multiline
-							placeholder="Type your dream entry here..."
-							placeholderTextColor="#bbb"
-							textAlignVertical="top"
-						/>
+					<View style={{ flex: 1 }}>
+						<View style={[styles.card, { flex: 1, minHeight: 180 }]}>
+							<TextInput
+								style={[styles.textInput, { flex: 1 }]}
+								value={text}
+								onChangeText={setText}
+								multiline
+								placeholder="Type your dream entry here..."
+								placeholderTextColor="#bbb"
+								textAlignVertical="top"
+								scrollEnabled
+							/>
+						</View>
 					</View>
 
 					{/* Tags */}
