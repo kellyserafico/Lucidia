@@ -4,119 +4,93 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function SignUpScreen() {
-	const [form, setForm] = useState({
-		firstName: "",
-		lastName: "",
-		email: "",
-		password: "",
-		confirmPassword: "",
-	});
+	const router = useRouter();
 	const [step, setStep] = useState<'form' | 'reminder'>('form');
 	const [reminderChoice, setReminderChoice] = useState<null | 'yes' | 'no'>(null);
-	const router = useRouter();
-
-	const handleChange = (field: string, value: string) => {
-		setForm({ ...form, [field]: value });
-	};
-
-	const isFormValid = () =>
-		form.firstName && form.lastName && form.email && form.password && form.password === form.confirmPassword;
 
 	return (
 		<LinearGradient
-			colors={["#4B378D", "#2C1E57"]}
-			style={styles.gradient}>
+			colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]}
+			style={{ flex: 1 }}>
 			<SafeAreaView style={styles.container}>
 				{step === 'form' && (
-						<><Text style={styles.heading}>What are your details?</Text>
-						<View style={styles.formBox}>
-							<View style={styles.inputGroup}>
-								<Text style={styles.label}>First Name</Text>
-								<TextInput
-									style={styles.input}
-									placeholder="Enter your first name"
-									placeholderTextColor="#ccc"
-									onChangeText={(value) => handleChange("firstName", value)}
-								/>
-							</View>
+						<View>
+							<Text style={styles.heading}>What are your details?</Text>
+							<View style={styles.formBox}>
+								<View style={{ marginBottom: 18 }}>
+									<Text style={styles.inputLabel}>First Name</Text>
+									<TextInput
+										style={styles.inputBox}
+										placeholder="Enter your first name"
+										placeholderTextColor="hsla(0, 0.00%, 46.30%, 0.80)"
+									/>
+								</View>
 
-							<View style={styles.inputGroup}>
-								<Text style={styles.label}>Last Name</Text>
-								<TextInput
-									style={styles.input}
-									placeholder="Enter your last name"
-									placeholderTextColor="#ccc"
-									onChangeText={(value) => handleChange("lastName", value)}
-								/>
-							</View>
-							
-							<View style={styles.inputGroup}>
-								<Text style={styles.label}>Enter your email</Text>
-								<TextInput
-									style={styles.input}
-									placeholder="Enter your email"
-									placeholderTextColor="#ccc"
-									keyboardType="email-address"
-									autoCapitalize="none"
-									onChangeText={(value) => handleChange("email", value)}
-								/>
-							</View>
+								<View style={{ marginBottom: 18 }}>
+									<Text style={styles.inputLabel}>Last Name</Text>
+									<TextInput
+										style={styles.inputBox}
+										placeholder="Enter your last name"
+										placeholderTextColor="hsla(0, 0.00%, 46.30%, 0.80)"
+									/>
+								</View>
+								
+								<View style={{ marginBottom: 18 }}>
+									<Text style={styles.inputLabel}>Email</Text>
+									<TextInput
+										style={styles.inputBox}
+										placeholder="Enter your email"
+										placeholderTextColor="hsla(0, 0.00%, 46.30%, 0.80)"
+									/>
+								</View>
 
-							<View style={styles.inputGroup}>
-								<Text style={styles.label}>Enter your password</Text>
-								<TextInput
-									style={styles.input}
-									placeholder="Enter your password"
-									placeholderTextColor="#ccc"
-									secureTextEntry
-									onChangeText={(value) => handleChange("password", value)}
-								/>
-							</View>
+								<View style={{ marginBottom: 18 }}>
+									<Text style={styles.inputLabel}>Password</Text>
+									<TextInput
+										style={styles.inputBox}
+										placeholder="Enter your password"
+										placeholderTextColor="hsla(0, 0.00%, 46.30%, 0.80)"
+										secureTextEntry
+									/>
+								</View>
 
-							<View style={styles.inputGroup}>
-								<Text style={styles.label}>Re-enter your password</Text>
-								<TextInput
-									style={styles.input}
-									placeholder="Re-enter your password"
-									placeholderTextColor="#ccc"
-									secureTextEntry
-									onChangeText={(value) => handleChange("confirmPassword", value)}
-								/>
+								<View style={{ marginBottom: 18 }}>
+									<Text style={styles.inputLabel}>Re-enter password</Text>
+									<TextInput
+										style={styles.inputBox}
+										placeholder="Re-enter your password"
+										placeholderTextColor="hsla(0, 0.00%, 46.30%, 0.80)"
+										secureTextEntry
+									/>
+								</View>
 							</View>
-						</View></>
+						</View>
 				)}
 
 				{step === 'reminder' && (
-					<>
+					<View>
 						<Text style={styles.heading}>Do you want to receive reminders to journal when you wake ?</Text>
 						<View style={styles.reminderCard}>
 							<TouchableOpacity
-								style={[styles.reminderBtn, reminderChoice === 'yes' && styles.reminderBtnSelected]}
+								style={[styles.reminderButton, { marginBottom: 18 }, reminderChoice === 'yes' && { backgroundColor: "rgba(123, 94, 255, 0.4)" }]}
 								onPress={() => setReminderChoice('yes')}>
 								<Text style={styles.reminderBtnText}>Yes, send me reminders.</Text>
 							</TouchableOpacity>
 
 							<TouchableOpacity
-								style={[styles.reminderBtn, reminderChoice === 'no' && styles.reminderBtnSelected]}
+								style={[styles.reminderButton, reminderChoice === 'no' && { backgroundColor: "rgba(123, 94, 255, 0.4)" }]}
 								onPress={() => setReminderChoice('no')}>
 								<Text style={styles.reminderBtnText}>No, don't send me reminders.</Text>
 							</TouchableOpacity>
 						</View>
-					</>
+					</View>
 				)}
 
 				<View style={styles.buttonContainer}>
 					<TouchableOpacity
-						disabled={step === 'form' ? !isFormValid() : !reminderChoice}
-						style={[styles.button, (step === 'form' ? !isFormValid() : !reminderChoice) && styles.buttonDisabled]}
-						onPress={() => {
-							if (step === 'form') {
-								setStep('reminder');
-							}
-							else {
-								router.push('/(tabs)/home');
-							}
-						}}>
+						disabled={step === 'reminder' ? !reminderChoice : false}
+						style={[styles.button, (step === 'reminder' ? !reminderChoice : false) && { backgroundColor: "rgba(123, 94, 255, 0.4)" }]}
+						onPress={() => { step === 'form' ? setStep('reminder') : router.push('/(tabs)/home') }}>
 						<Text style={styles.buttonText}>Continue</Text>
 					</TouchableOpacity>
 				</View>
@@ -126,10 +100,6 @@ export default function SignUpScreen() {
 }
 
 const styles = StyleSheet.create({
-	gradient: {
-		flex: 1,
-	},
-
 	container: {
 		flex: 1,
 		paddingHorizontal: 0,
@@ -149,24 +119,20 @@ const styles = StyleSheet.create({
 	formBox: {
 		borderRadius: 40,
 		padding: 28,
-		backgroundColor: "hsl(272, 23.10%, 12.70%)",
+		backgroundColor: "rgba(0, 10, 69, 0.5)",
 		marginBottom: 32,
 		marginHorizontal: 24,
 	},
 
-	inputGroup: {
-		marginBottom: 18,
-	},
-
-	label: {
+	inputLabel: {
 		color: "#fff",
 		fontSize: 16,
-		marginBottom: 6,
+		marginBottom: 8,
 		marginLeft: 2,
 		fontWeight: "400",
 	},
 
-	input: {
+	inputBox: {
 		backgroundColor: "rgba(255, 255, 255, 0.05)",
 		borderColor: "#9C8CFF",
 		borderWidth: 1,
@@ -183,10 +149,10 @@ const styles = StyleSheet.create({
 		borderRadius: 14,
 		alignItems: "center",
 		marginHorizontal: 16,
-	},
-
-	buttonDisabled: {
-		backgroundColor: "rgba(123, 94, 255, 0.4)",
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 4,
 	},
 
 	buttonText: {
@@ -196,7 +162,7 @@ const styles = StyleSheet.create({
 	},
 
 	reminderCard: {
-		backgroundColor: "#2D2266",
+		backgroundColor: "rgba(0, 10, 69, 0.5)",
 		borderRadius: 32,
 		marginHorizontal: 12,
 		marginBottom: 32,
@@ -204,17 +170,18 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 8,
 	},
 
-	reminderBtn: {
+	reminderButton: {
 		backgroundColor: "#7B5EFF",
 		paddingVertical: 16,
 		borderRadius: 14,
 		alignItems: "center",
 		marginHorizontal: 16,
-		marginBottom: 18,
-	},
-
-	reminderBtnSelected: {
-		backgroundColor: "rgba(123, 94, 255, 0.4)",
+		height: 70,
+		justifyContent: 'center',
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 4,
 	},
 
 	reminderBtnText: {
@@ -228,6 +195,5 @@ const styles = StyleSheet.create({
 		right: 0,
 		bottom: 56,
 		width: '100%',
-		zIndex: 10,
 	}
 });

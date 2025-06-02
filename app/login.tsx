@@ -1,65 +1,73 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React from "react";
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function LoginScreen() {
 	const router = useRouter();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
 
 	const handleLoginPress = () => {
-		console.log("Login attempted:", email, password);
 		router.replace("/home");
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<View style={styles.wrapper}>
-				<Text style={styles.title}>Welcome Back</Text>
-				<Text style={styles.subtitle}>Log in to your dream journal</Text>
+		<LinearGradient
+			colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]}
+			style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
+				<View style={styles.logInContainer}>
+					<View style={styles.logInContentContainer}>
+						<Text style={styles.title}>Welcome Back</Text>
+						<Text style={styles.subtitle}>Log in to your dream journal</Text>
 
-				<TextInput
-					placeholder="Email"
-					placeholderTextColor="#aaa"
-					value={email}
-					onChangeText={setEmail}
-					style={styles.input}
-					keyboardType="email-address"
-					autoCapitalize="none"
-				/>
+						<TextInput
+							style={styles.inputBox}
+							placeholder="Email"
+							placeholderTextColor="#aaa"
+						/>
 
-				<TextInput
-					placeholder="Password"
-					placeholderTextColor="#aaa"
-					value={password}
-					onChangeText={setPassword}
-					style={styles.input}
-					secureTextEntry
-				/>
+						<TextInput
+							style={styles.inputBox}
+							placeholder="Password"
+							placeholderTextColor="#aaa"
+							secureTextEntry
+						/>
 
-				<TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-					<Text style={styles.buttonText}>Log In</Text>
-				</TouchableOpacity>
+						<TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+							<Text style={styles.buttonText}>Log In</Text>
+						</TouchableOpacity>
 
-				<View style={{ flexDirection: "row", justifyContent: "center", marginTop: 16 }}>
-					<Text style={styles.helperText}>Don't have an account? </Text>
-					<TouchableOpacity onPress={() => router.replace("/SignUp")}>
-						<Text style={[styles.helperText, { color: "#7B5EFF", fontWeight: "bold" }]}>Sign up</Text>
-					</TouchableOpacity>
+						<View style={{ flexDirection: "row", justifyContent: "center", marginTop: 16 }}>
+							<Text style={styles.helperText}>Don't have an account? </Text>
+							<TouchableOpacity onPress={() => router.replace("/SignUp")}>
+								<Text style={[styles.helperText, { color: "#7B5EFF", fontWeight: "bold" }]}>Sign up</Text>
+							</TouchableOpacity>
+						</View>
+					</View>
 				</View>
-			</View>
-		</SafeAreaView>
+				
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57",
 		justifyContent: "center",
 		alignItems: "center",
 	},
-	wrapper: {
+	logInContainer: {
+		width: "90%",
+		backgroundColor: "rgba(0, 10, 69, 0.5)",
+		borderRadius: 32,
+		marginHorizontal: 12,
+		marginBottom: 32,
+		paddingVertical: 28,
+		paddingHorizontal: 8,
+		alignItems: "center",
+	},
+	logInContentContainer: {
 		width: "90%",
 		maxWidth: 400,
 	},
@@ -74,13 +82,15 @@ const styles = StyleSheet.create({
 		color: "#ccc",
 		marginBottom: 24,
 	},
-	input: {
-		backgroundColor: "#3D2A74",
+	inputBox: {
+		backgroundColor: "rgba(255, 255, 255, 0.05)",
+		borderColor: "#9C8CFF",
+		borderWidth: 1,
 		borderRadius: 12,
-		paddingHorizontal: 16,
+		paddingHorizontal: 14,
 		paddingVertical: 14,
-		fontSize: 16,
 		color: "#fff",
+		fontSize: 16,
 		marginBottom: 16,
 	},
 	button: {

@@ -1,13 +1,14 @@
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Landing() {
+	const router = useRouter();
 	const [showUserPage, setshowUserPage] = useState(false);
 	const titleFadeStart = useRef(new Animated.Value(1)).current;
 	const titleFadeUpStart = useRef(new Animated.Value(0)).current;
 	const userPageFadeStart = useRef(new Animated.Value(0)).current;
-	const router = useRouter();
 
 	useEffect(() => {
 		const timeout = setTimeout(() => {
@@ -35,44 +36,47 @@ export default function Landing() {
 	});
 
 	return (
-		<View style={styles.container}>
-			{!showUserPage && (
-				<Animated.View
-					style={{
-						opacity: titleFadeStart,
-						transform: [{ translateY: titleFadeUpStart }],
-						position: "absolute",
-						width: "100%",
-						alignItems: "center",
-					}}
-				>
-					<Text style={styles.welcome}>Welcome to</Text>
-					<Text style={styles.lucidia}>Lucidia</Text>
-				</Animated.View>
-			)}
+		<LinearGradient
+			colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]}
+			style={{ flex: 1 }}>
+			<View style={styles.container}>
+				{!showUserPage && (
+					<Animated.View
+						style={{
+							opacity: titleFadeStart,
+							transform: [{ translateY: titleFadeUpStart }],
+							position: "absolute",
+							width: "100%",
+							alignItems: "center",
+						}}
+					>
+						<Text style={styles.welcome}>Welcome to</Text>
+						<Text style={styles.lucidia}>Lucidia</Text>
+					</Animated.View>
+				)}
 
-			{showUserPage && (
-				<Animated.View style={[styles.userPageCard, { opacity: userPageFadeStart }]}>
-					<Image source={require("../assets/images/akar-icons_moon.png")} style={{ width: 80, height: 80, marginBottom: 16 }} />
-					<Text style={styles.lucidiaCard}>Lucidia</Text>
+				{showUserPage && (
+					<Animated.View style={[styles.userPageCard, { opacity: userPageFadeStart }]}>
+						<Image source={require("../assets/images/akar-icons_moon.png")} style={{ width: 80, height: 80, marginBottom: 16 }} />
+						<Text style={styles.lucidiaCard}>Lucidia</Text>
 
-					<TouchableOpacity style={styles.loginBtn} activeOpacity={0.8} onPress={() => router.push("/login")}>
-						<Text style={styles.loginBtnText}>Log In</Text>
-					</TouchableOpacity>
+						<TouchableOpacity style={styles.loginBtn} activeOpacity={0.8} onPress={() => router.push("/login")}>
+							<Text style={styles.loginBtnText}>Log In</Text>
+						</TouchableOpacity>
 
-					<TouchableOpacity style={styles.createBtn} activeOpacity={0.8} onPress={() => router.push("/SignUp")}>
-						<Text style={styles.createBtnText}>Create Account</Text>
-					</TouchableOpacity>
-				</Animated.View>
-			)}
-		</View>
+						<TouchableOpacity style={styles.createBtn} activeOpacity={0.8} onPress={() => router.push("/SignUp")}>
+							<Text style={styles.createBtnText}>Create Account</Text>
+						</TouchableOpacity>
+					</Animated.View>
+				)}
+			</View>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#4B378D",
 		justifyContent: "center",
 		alignItems: "center",
 	},
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
 	userPageCard: {
 		width: "90%",
 		maxWidth: 400,
-		backgroundColor: "#2D2266",
+		backgroundColor: "rgba(0, 10, 69, 0.5)",
 		borderRadius: 32,
 		alignItems: "center",
 		paddingVertical: 40,
