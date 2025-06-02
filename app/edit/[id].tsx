@@ -14,7 +14,6 @@ export default function EditTextScreen() {
 	const [selectedMood, setSelectedMood] = useState(entry ? entry.mood : "😊");
 	const [selectedTags, setSelectedTags] = useState(entry ? entry.tags.map((t) => t.label) : []);
 
-	// All unique tags from all entries
 	const allTags = Array.from(new Set(entries.flatMap((e) => e.tags.map((t) => t.label))));
 
 	if (!entry) {
@@ -40,7 +39,6 @@ export default function EditTextScreen() {
 					<Text style={styles.date}>{entry.date}</Text>
 					<Text style={styles.dayTime}>{entry.dayTime}</Text>
 
-					{/* Mood Selection */}
 					<Text style={styles.sectionTitle}>Mood</Text>
 					<View style={styles.emojiRow}>
 						{moodOptions.map((emoji) => (
@@ -54,7 +52,6 @@ export default function EditTextScreen() {
 						))}
 					</View>
 
-					{/* Editable Text */}
 					<Text style={styles.sectionTitle}>Dream Description</Text>
 					<View style={{ flex: 1 }}>
 						<View style={[styles.card, { flex: 1, minHeight: 180 }]}>
@@ -71,7 +68,6 @@ export default function EditTextScreen() {
 						</View>
 					</View>
 
-					{/* Tags */}
 					<Text style={styles.sectionTitle}>Tags</Text>
 					<View style={styles.tagRow}>
 						{allTags.map((tag) => (
@@ -86,7 +82,6 @@ export default function EditTextScreen() {
 					</View>
 				</View>
 
-				{/* Save Button */}
 				<View style={styles.nextBtnContainer}>
 					<TouchableOpacity
 						style={styles.nextBtn}
@@ -152,10 +147,6 @@ const styles = StyleSheet.create({
 		borderRadius: 18,
 		padding: 16,
 		marginBottom: 24,
-		shadowColor: "#000",
-		shadowOffset: { width: 0, height: 8 },
-		shadowOpacity: 0.18,
-		shadowRadius: 24,
 		elevation: 8,
 		minHeight: 180,
 	},

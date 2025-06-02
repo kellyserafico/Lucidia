@@ -1,13 +1,45 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { useEntries } from "./contexts/EntriesContext";
+
+const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
+
+const allTags = [
+	"Forest",
+	"Pool of Water",
+	"Serene",
+	"Curiosity",
+	"Puzzle",
+	"Mystery",
+	"Chase",
+	"Escape",
+	"Funny",
+	"Friends",
+	"Adventure",
+	"Mountains",
+	"Night",
+	"Stars",
+	"Calm",
+	"Celebration",
+	"Family",
+	"Peaceful",
+	"Garden",
+	"Beach",
+	"Discovery",
+	"Excitement",
+];
 
 export default function NewEntryScreen() {
 	const router = useRouter();
+	const { addEntry } = useEntries();
 	const [text, setText] = useState("");
+	const [selectedMood, setSelectedMood] = useState("😊");
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 	const now = new Date();
-	const isoDate = now.toISOString().slice(0, 10); // 'YYYY-MM-DD'
+	const isoDate = now.toLocaleDateString('en-CA');
 	const formattedDate = now.toLocaleDateString("en-US", {
 		month: "long",
 		day: "numeric",
@@ -19,17 +51,30 @@ export default function NewEntryScreen() {
 		minute: "2-digit",
 	});
 
-	const handleNext = () => {
-		// Replace with actual save + navigate to tag/mood step
-		router.push({
-			pathname: "/new-entry-details",
-			params: { text, date: isoDate, dayTime: `${weekday} | ${time}` },
-		});
+	const toggleTag = (tag: string) => {
+		setSelectedTags((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
+	};
+
+	const handleSave = () => {
+		const id = isoDate;
+		const entry = {
+			id,
+			date: isoDate,
+			dayTime: `${weekday} | ${time}`,
+			text,
+			mood: selectedMood,
+			tags: selectedTags.map((label) => ({ label })),
+		};
+		addEntry(entry);
+		router.replace("/home");
 	};
 
 	return (
 		<SafeAreaView style={styles.container}>
-			<View style={styles.contentWrapper}>
+			<TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/home")}> 
+				<Ionicons name="chevron-back" size={32} color="#fff" />
+			</TouchableOpacity>
+			<ScrollView contentContainerStyle={styles.wrapper}>
 				<Text style={styles.dateText}>{formattedDate}</Text>
 				<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
 
@@ -42,14 +87,39 @@ export default function NewEntryScreen() {
 					onChangeText={setText}
 				/>
 
+				<Text style={styles.sectionTitle}>Mood Upon Waking</Text>
+				<View style={styles.emojiRow}>
+					{moodOptions.map((emoji) => (
+						<TouchableOpacity
+							key={emoji}
+							onPress={() => setSelectedMood(emoji)}
+							style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
+						>
+							<Text style={styles.emoji}>{emoji}</Text>
+						</TouchableOpacity>
+					))}
+				</View>
+
+				<Text style={styles.sectionTitle}>Select Tags</Text>
+				<View style={styles.tagRow}>
+					{allTags.map((tag) => {
+						const selected = selectedTags.includes(tag);
+						return (
+							<TouchableOpacity key={tag} onPress={() => toggleTag(tag)} style={[styles.tag, selected && styles.selectedTag]}>
+								<Text style={styles.tagText}>{tag}</Text>
+							</TouchableOpacity>
+						);
+					})}
+				</View>
+
 				<TouchableOpacity
 					style={[styles.button, text.trim() === "" && styles.buttonDisabled]}
 					disabled={text.trim() === ""}
-					onPress={handleNext}
+					onPress={handleSave}
 				>
-					<Text style={styles.buttonText}>Next</Text>
+					<Text style={styles.buttonText}>Save Entry</Text>
 				</TouchableOpacity>
-			</View>
+			</ScrollView>
 		</SafeAreaView>
 	);
 }
@@ -60,12 +130,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#2C1E57",
 		paddingTop: 40,
 	},
-	contentWrapper: {
+	wrapper: {
 		width: "100%",
 		maxWidth: 420,
 		alignSelf: "center",
 		paddingHorizontal: 24,
-		flex: 1,
+		paddingBottom: 64,
 	},
 	dateText: {
 		fontSize: 22,
@@ -92,6 +162,51 @@ const styles = StyleSheet.create({
 		shadowOffset: { width: 0, height: 2 },
 		marginBottom: 24,
 	},
+	sectionTitle: {
+		fontSize: 18,
+		fontWeight: "bold",
+		color: "#fff",
+		marginBottom: 8,
+	},
+	emojiRow: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		marginBottom: 16,
+	},
+	emojiButton: {
+		backgroundColor: "#3D2A74",
+		borderRadius: 12,
+		padding: 12,
+		alignItems: "center",
+	},
+	selectedEmoji: {
+		backgroundColor: "#7B5EFF",
+	},
+	emoji: {
+		fontSize: 24,
+		fontWeight: "bold",
+		color: "#fff",
+	},
+	tagRow: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		marginBottom: 16,
+	},
+	tag: {
+		backgroundColor: "#3D2A74",
+		borderRadius: 12,
+		padding: 12,
+		marginRight: 8,
+		marginBottom: 8,
+	},
+	selectedTag: {
+		backgroundColor: "#7B5EFF",
+	},
+	tagText: {
+		fontSize: 16,
+		fontWeight: "bold",
+		color: "#fff",
+	},
 	button: {
 		backgroundColor: "#7B5EFF",
 		paddingVertical: 14,
@@ -106,5 +221,13 @@ const styles = StyleSheet.create({
 		color: "#fff",
 		fontWeight: "bold",
 		fontSize: 16,
+	},
+	backBtn: {
+		marginBottom: 12,
+		marginLeft: 2,
+		width: 40,
+		height: 40,
+		justifyContent: "center",
+		alignItems: "flex-start",
 	},
 });
