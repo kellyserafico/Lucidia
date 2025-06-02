@@ -4,137 +4,107 @@ import React, { useState } from "react";
 import { Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useEntries } from "../contexts/EntriesContext";
 
-interface Week extends Array<number | null> {}
-type Weeks = Week[];
-
 export default function HomeScreen() {
 	const router = useRouter();
 	const { entries } = useEntries();
 	const today = new Date();
-	const [displayedMonth, setDisplayedMonth] = useState(today.getMonth());
-	const [displayedYear] = useState(today.getFullYear());
+	const [displayedMonthNum, setdisplayedMonthNum] = useState(today.getMonth());
 	const [selectedDate, setSelectedDate] = useState({
 		year: today.getFullYear(),
 		month: today.getMonth(),
-		day: today.getDate(),
+		day: today.getDate()
 	});
+	const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+	const weeksForMay: Array<Array<number | null>> = [
+		[null, null, null, 1, 2, 3, 4],
+		[5, 6, 7, 8, 9, 10, 11],
+		[12, 13, 14, 15, 16, 17, 18],
+		[19, 20, 21, 22, 23, 24, 25],
+		[26, 27, 28, 29, 30, 31, null]
+	];
+	const weeksForJune: Array<Array<number | null>> = [
+		[1, 2, 3, 4, 5, 6, 7],
+		[8, 9, 10, 11, 12, 13, 14],
+		[15, 16, 17, 18, 19, 20, 21],
+		[22, 23, 24, 25, 26, 27, 28],
+		[29, 30, null, null, null, null, null]
+	];
+	const weeks = displayedMonthNum === 4 ? weeksForMay : weeksForJune;
+	const selectedId = `2025-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(2, "0")}`;
+	const selectedEntry = entries.find((e) => e.id === selectedId);
+	const selectedMonth = displayedMonthNum === 4 ? "May" : "June";
+	const selectedDay = selectedDate.day;
+	const selectedWeekday = new Date(selectedDate.year, selectedDate.month, selectedDate.day).toLocaleDateString("en-US", { weekday: "long" });
 
-	const getDateSuffix = (day: number) => {
-		if (day >= 11 && day <= 13) return `${day}th`;
-		switch (day % 10) {
-			case 1:
-				return `${day}st`;
-			case 2:
-				return `${day}nd`;
-			case 3:
-				return `${day}rd`;
-			default:
-				return `${day}th`;
+	const getDateEndString = (day: number) => {
+		if (day < 4 || day > 20) {
+			return `${day}th`;
+		} else if (day % 10 === 1) {
+			return `${day}st`;
+		} else if (day % 10 === 2) {
+			return `${day}nd`;
+		} else if (day % 10 === 3) {
+			return `${day}rd`;
+		} else {
+			return `${day}th`;
 		}
 	};
 
-	const isPrevMonthAllowed = displayedMonth > 4;
-	const isNextMonthAllowed = displayedMonth < 5;
-
-	const weeksByMonth: { [key: string]: Weeks } = {
-		"2025-4": [
-			[null, null, null, 1, 2, 3, 4],
-			[5, 6, 7, 8, 9, 10, 11],
-			[12, 13, 14, 15, 16, 17, 18],
-			[19, 20, 21, 22, 23, 24, 25],
-			[26, 27, 28, 29, 30, 31, null],
-		],
-		"2025-5": [
-			[1, 2, 3, 4, 5, 6, 7],
-			[8, 9, 10, 11, 12, 13, 14],
-			[15, 16, 17, 18, 19, 20, 21],
-			[22, 23, 24, 25, 26, 27, 28],
-			[29, 30, null, null, null, null, null],
-		],
-	};
-	const weeks = weeksByMonth[`${displayedYear}-${displayedMonth}`] || [];
-	const monthName = displayedMonth === 4 ? "May" : "June";
-
-	const selectedId = `${selectedDate.year}-${String(selectedDate.month + 1).padStart(2, "0")}-${String(selectedDate.day).padStart(
-		2,
-		"0"
-	)}`;
-	const selectedEntry = entries.find((e) => e.id === selectedId);
-
-	const selectedDateObj = new Date(selectedDate.year, selectedDate.month, selectedDate.day);
-	const selectedMonthName = selectedDateObj.toLocaleDateString("en-US", { month: "long" });
-	const selectedDay = selectedDateObj.getDate();
-	const selectedYear = selectedDateObj.getFullYear();
-	const selectedWeekday = selectedDateObj.toLocaleDateString("en-US", { weekday: "long" });
-
 	return (
-		<LinearGradient
-			colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]}
-			style={{ flex: 1 }}>
+		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
 			<SafeAreaView style={styles.container}>
 				<ScrollView>
 					<View style={styles.header}>
-						<Text style={styles.dateText}>{`${selectedMonthName} ${getDateSuffix(selectedDay)}, ${selectedYear}`}</Text>
+						<Text style={styles.dateText}>{`${selectedMonth} ${getDateEndString(selectedDay)}, 2025`}</Text>
 						<Text style={styles.timeText}>{selectedWeekday}</Text>
 					</View>
 
-					<View style={styles.calendarCard}>
+					<View style={styles.calendarContainer}>
 						<TouchableOpacity
-							style={[styles.arrowBtn, styles.arrowLeft, !isPrevMonthAllowed && styles.arrowBtnDisabled]}
-							disabled={!isPrevMonthAllowed}
-							onPress={() => setDisplayedMonth(displayedMonth - 1)}
-						>
+							style={[styles.arrowBtn, styles.arrowLeft, displayedMonthNum === 4 && styles.arrowBtnDisabled]}
+							disabled={displayedMonthNum === 4}
+							onPress={() => setdisplayedMonthNum(displayedMonthNum - 1)}>
 							<Text style={styles.arrowText}>{"‹"}</Text>
 						</TouchableOpacity>
+
 						<TouchableOpacity
-							style={[styles.arrowBtn, styles.arrowRight, !isNextMonthAllowed && styles.arrowBtnDisabled]}
-							disabled={!isNextMonthAllowed}
-							onPress={() => setDisplayedMonth(displayedMonth + 1)}
-						>
+							style={[styles.arrowBtn, styles.arrowRight, displayedMonthNum === 5 && styles.arrowBtnDisabled]}
+							disabled={displayedMonthNum === 5}
+							onPress={() => setdisplayedMonthNum(displayedMonthNum + 1)}>
 							<Text style={styles.arrowText}>{"›"}</Text>
 						</TouchableOpacity>
 
-						<Text style={styles.calendarTitle}>{monthName}</Text>
+						<Text style={styles.calendarTitle}>{selectedMonth}</Text>
 						<View style={styles.calendarGrid}>
-							{["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((d) => (
-								<Text key={d} style={styles.dayHeader}>
-									{d}
-								</Text>
+							{weekdays.map((d) => (
+								<Text style={styles.weekdayName}>{d}</Text>
 							))}
 
-							{weeks.map((week, wi) => (
-								<View key={wi} style={{ flexDirection: "row", width: "100%" }}>
-									{week.map((day, i) => {
-										if (!day) return <View key={i} style={styles.emptySpace} />;
-										const isFutureDate =
-											displayedYear > today.getFullYear() ||
-											(displayedYear === today.getFullYear() && displayedMonth > today.getMonth()) ||
-											(displayedYear === today.getFullYear() && displayedMonth === today.getMonth() && day > today.getDate());
-
-										const dateId = `${displayedYear}-${String(displayedMonth + 1).padStart(2, "0")}-${String(day).padStart(
-											2,
-											"0"
-										)}`;
+							{weeks.map((week) => (
+								<View style={{ flexDirection: "row", width: "100%" }}>
+									{week.map((day) => {
+										const dateId = `${selectedDate.year}-${String(displayedMonthNum + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 										const hasEntry = entries.some((e) => e.id === dateId);
-										const isSelected =
-											selectedDate.year === displayedYear && selectedDate.month === displayedMonth && selectedDate.day === day;
+										const isSelected = selectedDate.month === displayedMonthNum && selectedDate.day === day;
+										const checkInvalidDate = day === null || (displayedMonthNum === today.getMonth() && day > today.getDate());
 
 										return (
 											<TouchableOpacity
-												key={i}
-												disabled={isFutureDate}
+												disabled={checkInvalidDate}
 												style={[
-													styles.dateTextCell,
+													styles.individualDate,
 													isSelected && styles.selectedDay,
-													day === today.getDate() &&
-														displayedMonth === today.getMonth() &&
-														displayedYear === today.getFullYear() &&
-														styles.today,
-													isFutureDate && styles.futureDate,
+													day === today.getDate() && displayedMonthNum === today.getMonth() && styles.today,
+													checkInvalidDate && styles.invalidDate
 												]}
-												onPress={() => setSelectedDate({ year: displayedYear, month: displayedMonth, day })}
-											>
-												<Text style={[styles.dateTextCellText, isFutureDate && styles.futureDateText]}>{day}</Text>
+												onPress={() =>
+													setSelectedDate({
+														year: 2025,
+														month: displayedMonthNum,
+														day: day ?? 0,
+													})
+												}>
+												<Text style={[styles.individualDateText, checkInvalidDate && styles.invalidDateText]}>{day}</Text>
 												{hasEntry && <View style={styles.dot} />}
 											</TouchableOpacity>
 										);
@@ -147,14 +117,13 @@ export default function HomeScreen() {
 					{selectedEntry ? (
 						<TouchableOpacity
 							style={styles.eventCard}
-							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: selectedEntry.id } })}
-						>
+							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: selectedEntry.id } })}>
 							<Text style={styles.emoji}>{selectedEntry.mood}</Text>
 							<View>
 								<Text style={styles.eventTime}>
 									{selectedEntry.date} | {selectedEntry.dayTime}
 								</Text>
-								<Text style={styles.eventTitle} numberOfLines={1} ellipsizeMode="tail">
+								<Text style={styles.eventTitle} numberOfLines={1}>
 									{((selectedEntry as any).text || "No description").slice(0, 30)}
 									...
 								</Text>
@@ -167,7 +136,7 @@ export default function HomeScreen() {
 
 				<View style={styles.addEntryBtnContainer}>
 					<TouchableOpacity style={styles.addEntryBtn} onPress={() => router.push("/new-entry")}>
-						<Text style={styles.addEntryBtnText}>Add Entry</Text>
+						<Text style={styles.addEntryBtnText}>Add Today's Entry</Text>
 					</TouchableOpacity>
 				</View>
 			</SafeAreaView>
@@ -178,120 +147,120 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 50,
+		paddingTop: 50
 	},
 	header: {
 		paddingHorizontal: 24,
-		marginBottom: 20,
+		marginBottom: 20
 	},
 	dateText: {
 		fontSize: 20,
 		color: "#ffffff",
-		fontWeight: "600",
+		fontWeight: "600"
 	},
 	timeText: {
 		color: "#ccc",
-		marginTop: 4,
+		marginTop: 4
 	},
-	calendarCard: {
+	calendarContainer: {
 		backgroundColor: "rgba(0, 10, 69, 0.5)",
 		borderRadius: 20,
 		paddingHorizontal: 16,
 		paddingVertical: 28,
 		marginHorizontal: 24,
 		marginBottom: 20,
-		position: "relative",
+		position: "relative"
 	},
 	calendarTitle: {
 		color: "#fff",
 		fontSize: 16,
 		fontWeight: "bold",
 		textAlign: "center",
-		marginBottom: 24,
+		marginBottom: 24
 	},
 	calendarGrid: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		justifyContent: "space-between",
+		justifyContent: "space-between"
 	},
-	dayHeader: {
-		width: "14.2%",
+	weekdayName: {
+		width: "14%",
 		color: "#aaa",
 		textAlign: "center",
 		fontWeight: "600",
-		marginBottom: 16,
+		marginBottom: 16
 	},
-	dateTextCell: {
-		width: "14.2%",
+	individualDate: {
+		width: "14%",
 		aspectRatio: 1,
 		alignItems: "center",
 		justifyContent: "center",
 		marginBottom: 8,
-		borderRadius: 10,
+		borderRadius: 10
 	},
-	dateTextCellText: {
+	individualDateText: {
 		color: "#eee",
 		fontSize: 16,
 		fontWeight: "400",
-		textAlign: "center",
+		textAlign: "center"
 	},
 	today: {
 		backgroundColor: "#7B5EFF",
-		borderRadius: 10,
+		borderRadius: 10
 	},
 	emptySpace: {
-		width: "14.2%",
+		width: "14%",
 		aspectRatio: 1,
-		marginBottom: 14,
+		marginBottom: 14
 	},
 	eventCard: {
 		flexDirection: "row",
 		alignItems: "center",
-		backgroundColor: "#443072",
+		backgroundColor: "#4548A6",
 		borderRadius: 12,
 		padding: 14,
-		marginHorizontal: 24,
+		marginHorizontal: 24
 	},
 	emoji: {
 		fontSize: 28,
-		marginRight: 12,
+		marginRight: 12
 	},
 	eventTitle: {
 		color: "#fff",
 		fontWeight: "600",
-		fontSize: 16,
+		fontSize: 16
 	},
 	eventTime: {
 		color: "#ccc",
 		fontSize: 12,
-		marginTop: 2,
+		marginTop: 2
 	},
 	arrowBtn: {
 		position: "absolute",
 		top: 12,
 		zIndex: 2,
 		borderRadius: 20,
-		padding: 8,
+		padding: 8
 	},
 	arrowLeft: {
-		left: 8,
+		left: 8
 	},
 	arrowRight: {
-		right: 8,
+		right: 8
 	},
 	arrowBtnDisabled: {
-		opacity: 0.3,
+		opacity: 0.3
 	},
 	arrowText: {
 		color: "#fff",
 		fontSize: 32,
-		fontWeight: "bold",
+		fontWeight: "bold"
 	},
-	futureDate: {
-		opacity: 0.3,
+	invalidDate: {
+		opacity: 0.3
 	},
-	futureDateText: {
-		color: "#aaa",
+	invalidDateText: {
+		color: "#aaa"
 	},
 	dot: {
 		width: 6,
@@ -299,33 +268,33 @@ const styles = StyleSheet.create({
 		borderRadius: 3,
 		backgroundColor: "#B6A8F7",
 		alignSelf: "center",
-		marginTop: 2,
+		marginTop: 2
 	},
 	selectedDay: {
-		backgroundColor: "#B6A8F7",
+		backgroundColor: "#B6A8F7"
 	},
 	noEntryText: {
 		color: "#fff",
 		textAlign: "center",
 		marginTop: 32,
 		fontSize: 16,
-		opacity: 0.7,
+		opacity: 0.7
 	},
 	addEntryBtnContainer: {
 		paddingHorizontal: 24,
-		paddingBottom: Platform.OS === "web" ? 24 : 80,
+		paddingBottom: Platform.OS === "web" ? 24 : 80
 	},
 
 	addEntryBtn: {
 		backgroundColor: "#7B5EFF",
 		borderRadius: 12,
 		paddingVertical: 14,
-		alignItems: "center",
+		alignItems: "center"
 	},
 
 	addEntryBtnText: {
 		color: "#fff",
 		fontWeight: "bold",
-		fontSize: 18,
-	},
+		fontSize: 18
+	}
 });

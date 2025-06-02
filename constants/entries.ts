@@ -52,8 +52,6 @@ export const entries: Entry[] = [
 
 export const getEntries = () => entries;
 
-export const getEntryById = (id: string) => entries.find((e) => e.id === id);
-
 export const addEntry = (entry: Entry) => {
 	entries.push(entry);
 };

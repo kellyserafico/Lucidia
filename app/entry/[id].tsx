@@ -9,18 +9,15 @@ export default function EntryViewScreen() {
 	const { id } = useLocalSearchParams();
 
 	const { entries } = useEntries();
-	const entry = entries.find(e => e.id === id);
-
-	if (!entry) {
-		return (
-			<View style={styles.container}>
-				<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-					<Ionicons name="chevron-back" size={32} color="#fff" />
-				</TouchableOpacity>
-				<Text style={styles.date}>Entry not found.</Text>
-			</View>
-		);
-	}
+	const emptyEntry = {
+		id: "0",
+		date: "0",
+		dayTime: "0",
+		mood: "0",
+		tags: [],
+		text: "0",
+	};
+	const entry = entries.find(entry => entry.id === id) ?? emptyEntry;
 
 	return (
 		<View style={styles.container}>
