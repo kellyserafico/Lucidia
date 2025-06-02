@@ -18,35 +18,6 @@ export default function HomeScreen() {
 		day: today.getDate(),
 	});
 
-	function generateWeeksForMonth(year: number, month: number): Weeks {
-		const firstDay = new Date(year, month, 1);
-		const lastDay = new Date(year, month + 1, 0);
-		const totalDays = lastDay.getDate();
-
-		const weeks: Weeks = [];
-		let week: Week = new Array(7).fill(null);
-		let day = 1;
-
-		for (let i = 0; i < firstDay.getDay(); i++) {
-			week[i] = null;
-		}
-
-		for (let i = firstDay.getDay(); i < 7; i++) {
-			week[i] = day++;
-		}
-		weeks.push([...week]);
-
-		while (day <= totalDays) {
-			week = new Array(7).fill(null);
-			for (let i = 0; i < 7 && day <= totalDays; i++) {
-				week[i] = day++;
-			}
-			weeks.push([...week]);
-		}
-
-		return weeks;
-	}
-
 	const getDateSuffix = (day: number) => {
 		if (day >= 11 && day <= 13) return `${day}th`;
 		switch (day % 10) {
