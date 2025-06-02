@@ -6,13 +6,6 @@ import { useEntries } from "../contexts/EntriesContext";
 interface Week extends Array<number | null> {}
 type Weeks = Week[];
 
-interface Entry {
-	id: string;
-	mood: string;
-	date: string;
-	dayTime: string;
-}
-
 export default function HomeScreen() {
 	const router = useRouter();
 	const { entries } = useEntries();
