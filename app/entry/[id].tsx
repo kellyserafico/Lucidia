@@ -11,12 +11,12 @@ export default function EntryViewScreen() {
 
 	const { entries } = useEntries();
 	const emptyEntry = {
-		id: "0",
-		date: "0",
-		dayTime: "0",
-		mood: "0",
+		id: "N/A",
+		date: "N/A",
+		dayTime: "N/A",
+		mood: "N/A",
 		tags: [],
-		text: "0",
+		text: "Entry does not exist",
 	};
 	const entry = entries.find(entry => entry.id === id) ?? emptyEntry;
 
@@ -39,8 +39,8 @@ export default function EntryViewScreen() {
 							</TouchableOpacity>
 						</View>
 						<View style={styles.tagsRow}>
-							{entry.tags.map((tag, i) => (
-								<View key={i} style={styles.tag}>
+							{entry.tags.map((tag) => (
+								<View style={styles.tag}>
 									<Text style={styles.tagText}>{tag.label}</Text>
 								</View>
 							))}

@@ -1,11 +1,4 @@
-export type Entry = {
-	id: string;
-	date: string;
-	dayTime: string;
-	mood: string;
-	tags: { label: string }[];
-	text: string;
-};
+import { Entry } from "../app/types/Entry";
 
 export const entries: Entry[] = [
 	{
