@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -59,7 +60,7 @@ export default function NewEntryScreen() {
 		const id = isoDate;
 		const entry = {
 			id,
-			date: isoDate,
+			date: formattedDate,
 			dayTime: `${weekday} | ${time}`,
 			text,
 			mood: selectedMood,
@@ -70,64 +71,65 @@ export default function NewEntryScreen() {
 	};
 
 	return (
-		<SafeAreaView style={styles.container}>
-			<TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/home")}> 
-				<Ionicons name="chevron-back" size={32} color="#fff" />
-			</TouchableOpacity>
-			<ScrollView contentContainerStyle={styles.wrapper}>
-				<Text style={styles.dateText}>{formattedDate}</Text>
-				<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
-
-				<TextInput
-					style={styles.textArea}
-					placeholder="Start typing..."
-					placeholderTextColor="#aaa"
-					multiline
-					value={text}
-					onChangeText={setText}
-				/>
-
-				<Text style={styles.sectionTitle}>Mood Upon Waking</Text>
-				<View style={styles.emojiRow}>
-					{moodOptions.map((emoji) => (
-						<TouchableOpacity
-							key={emoji}
-							onPress={() => setSelectedMood(emoji)}
-							style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
-						>
-							<Text style={styles.emoji}>{emoji}</Text>
-						</TouchableOpacity>
-					))}
-				</View>
-
-				<Text style={styles.sectionTitle}>Select Tags</Text>
-				<View style={styles.tagRow}>
-					{allTags.map((tag) => {
-						const selected = selectedTags.includes(tag);
-						return (
-							<TouchableOpacity key={tag} onPress={() => toggleTag(tag)} style={[styles.tag, selected && styles.selectedTag]}>
-								<Text style={styles.tagText}>{tag}</Text>
-							</TouchableOpacity>
-						);
-					})}
-				</View>
-
-				<TouchableOpacity
-					style={[styles.button, text.trim() === "" && styles.buttonDisabled]}
-					disabled={text.trim() === ""}
-					onPress={handleSave}
-				>
-					<Text style={styles.buttonText}>Save Entry</Text>
+		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
+			<SafeAreaView style={styles.container}>
+				<TouchableOpacity style={styles.backBtn} onPress={() => router.replace("/home")}> 
+					<Ionicons name="chevron-back" size={32} color="#fff" />
 				</TouchableOpacity>
-			</ScrollView>
-		</SafeAreaView>
+				<ScrollView contentContainerStyle={styles.wrapper}>
+					<Text style={styles.dateText}>{formattedDate}</Text>
+					<Text style={styles.timeText}>{`${weekday} | ${time}`}</Text>
+
+					<TextInput
+						style={styles.textArea}
+						placeholder="Start typing..."
+						placeholderTextColor="#aaa"
+						multiline
+						value={text}
+						onChangeText={setText}
+					/>
+
+					<Text style={styles.sectionTitle}>Mood Upon Waking</Text>
+					<View style={styles.emojiRow}>
+						{moodOptions.map((emoji) => (
+							<TouchableOpacity
+								key={emoji}
+								onPress={() => setSelectedMood(emoji)}
+								style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
+							>
+								<Text style={styles.emoji}>{emoji}</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+
+					<Text style={styles.sectionTitle}>Select Tags</Text>
+					<View style={styles.tagRow}>
+						{allTags.map((tag) => {
+							const selected = selectedTags.includes(tag);
+							return (
+								<TouchableOpacity key={tag} onPress={() => toggleTag(tag)} style={[styles.tag, selected && styles.selectedTag]}>
+									<Text style={styles.tagText}>{tag}</Text>
+								</TouchableOpacity>
+							);
+						})}
+					</View>
+
+					<TouchableOpacity
+						style={[styles.button, text.trim() === "" && styles.buttonDisabled]}
+						disabled={text.trim() === ""}
+						onPress={handleSave}
+					>
+						<Text style={styles.buttonText}>Save Entry</Text>
+					</TouchableOpacity>
+				</ScrollView>
+			</SafeAreaView>
+		</LinearGradient>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#2C1E57",
 		paddingTop: 40,
 	},
 	wrapper: {
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	textArea: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "rgba(0,10,69,0.50)",
 		borderRadius: 16,
 		padding: 16,
 		fontSize: 16,
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	emojiButton: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "rgba(0,10,69,0.50)",
 		borderRadius: 12,
 		padding: 12,
 		alignItems: "center",
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 	tag: {
-		backgroundColor: "#3D2A74",
+		backgroundColor: "rgba(0,10,69,0.50)",
 		borderRadius: 12,
 		padding: 12,
 		marginRight: 8,
@@ -200,7 +202,6 @@ const styles = StyleSheet.create({
 	},
 	tagText: {
 		fontSize: 16,
-		fontWeight: "bold",
 		color: "#fff",
 	},
 	button: {

@@ -10,7 +10,7 @@ export type Entry = {
 export const entries: Entry[] = [
 	{
 		id: "2025-05-01",
-		date: "May 1st, 2025",
+		date: "May 1, 2025",
 		dayTime: "Thursday | 9:00 AM",
 		mood: "😴",
 		tags: [{ label: "Night" }, { label: "Stars" }, { label: "Calm" }],
@@ -18,7 +18,7 @@ export const entries: Entry[] = [
 	},
 	{
 		id: "2025-05-10",
-		date: "May 10th, 2025",
+		date: "May 10, 2025",
 		dayTime: "Saturday | 10:00 AM",
 		mood: "😃",
 		tags: [{ label: "Celebration" }, { label: "Family" }],
@@ -26,7 +26,7 @@ export const entries: Entry[] = [
 	},
 	{
 		id: "2025-05-15",
-		date: "May 15th, 2025",
+		date: "May 15, 2025",
 		dayTime: "Thursday | 7:00 AM",
 		mood: "😇",
 		tags: [{ label: "Peaceful" }, { label: "Garden" }],
@@ -34,7 +34,7 @@ export const entries: Entry[] = [
 	},
 	{
 		id: "2025-05-20",
-		date: "May 20th, 2025",
+		date: "May 20, 2025",
 		dayTime: "Tuesday | 8:30 AM",
 		mood: "😎",
 		tags: [{ label: "Adventure" }, { label: "Beach" }],
@@ -42,7 +42,7 @@ export const entries: Entry[] = [
 	},
 	{
 		id: "2025-05-25",
-		date: "May 25th, 2025",
+		date: "May 25, 2025",
 		dayTime: "Sunday | 10:00 AM",
 		mood: "🤩",
 		tags: [{ label: "Discovery" }, { label: "Excitement" }],

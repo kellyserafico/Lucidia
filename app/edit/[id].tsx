@@ -3,13 +3,14 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { entries } from "../../constants/entries";
+import { useEntries } from "../contexts/EntriesContext";
 
 const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
 
 export default function EditTextScreen() {
 	const router = useRouter();
 	const { id } = useLocalSearchParams();
+	const { entries } = useEntries();
 	const entry = entries.find((e) => e.id === id);
 
 	const [text, setText] = useState(entry ? entry.text : "");
