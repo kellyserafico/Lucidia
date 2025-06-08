@@ -2,7 +2,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useEntries } from "../contexts/EntriesContext";
 
 export default function EntryViewScreen() {
@@ -22,7 +22,7 @@ export default function EntryViewScreen() {
 
 	return (
 		<LinearGradient colors={["rgba(72, 52, 169, 0.75)", "rgba(69, 72, 166, 0.75)"]} style={{ flex: 1 }}>
-			<View style={styles.container}>
+			<SafeAreaView style={styles.container}>
 				<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
 					<Ionicons name="chevron-back" size={32} color="#fff" />
 				</TouchableOpacity>
@@ -30,26 +30,24 @@ export default function EntryViewScreen() {
 				<Text style={styles.date}>{entry.date}</Text>
 				<Text style={styles.dayTime}>{entry.dayTime}</Text>
 
-				<View>
-					<View style={styles.entryDetailsContainer}>
-						<View style={styles.moodRow}>
-							<Text style={styles.mood}>{entry.mood}</Text>
-							<TouchableOpacity onPress={() => router.push({ pathname: "/edit/[id]", params: { id: entry.id } })}>
-								<Feather name="edit-2" size={22} color="#fff" />
-							</TouchableOpacity>
-						</View>
-						<View style={styles.tagsRow}>
-							{entry.tags.map((tag) => (
-								<View style={styles.tag}>
-									<Text style={styles.tagText}>{tag.label}</Text>
-								</View>
-							))}
-						</View>
-						<View style={styles.divider} />
-						<Text style={styles.dreamText}>{entry.text}</Text>
+				<View style={styles.entryDetailsContainer}>
+					<View style={styles.moodContainer}>
+						<Text style={styles.mood}>{entry.mood}</Text>
+						<TouchableOpacity onPress={() => router.push({ pathname: "/edit/[id]", params: { id: entry.id } })}>
+							<Feather name="edit-2" size={22} color="#fff" />
+						</TouchableOpacity>
 					</View>
+					<View style={styles.tagsContainer}>
+						{entry.tags.map((tag, index) => (
+							<View key={index} style={styles.tag}>
+								<Text style={styles.tagText}>{tag.label}</Text>
+							</View>
+						))}
+					</View>
+					<View style={styles.divider} />
+					<Text style={styles.dreamText}>{entry.text}</Text>
 				</View>
-			</View>
+			</SafeAreaView>
 		</LinearGradient>
 	);
 }
@@ -57,7 +55,6 @@ export default function EntryViewScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingHorizontal: 16,
 		paddingTop: 24,
 	},
 	backBtn: {
@@ -67,6 +64,7 @@ const styles = StyleSheet.create({
 		height: 40,
 		justifyContent: "center",
 		alignItems: "flex-start",
+		paddingHorizontal: 16,
 	},
 	date: {
 		color: "#fff",
@@ -74,12 +72,14 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		marginBottom: 2,
 		marginLeft: 2,
+		paddingHorizontal: 16,
 	},
 	dayTime: {
 		color: "#d6d6f7",
 		fontSize: 16,
 		marginBottom: 18,
 		marginLeft: 2,
+		paddingHorizontal: 16,
 	},
 	entryDetailsContainer: {
 		backgroundColor: "rgba(0,10,69,0.50)",
@@ -87,8 +87,9 @@ const styles = StyleSheet.create({
 		padding: 20,
 		marginTop: 8,
 		elevation: 8,
+		marginHorizontal: 16,
 	},
-	moodRow: {
+	moodContainer: {
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "space-between",
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
 		fontSize: 36,
 		marginRight: 8,
 	},
-	tagsRow: {
+	tagsContainer: {
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: 10,

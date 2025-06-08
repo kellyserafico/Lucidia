@@ -76,13 +76,15 @@ export default function HomeScreen() {
 
 						<Text style={styles.calendarTitle}>{selectedMonth}</Text>
 						<View style={styles.calendarGrid}>
-							{weekdays.map((d) => (
-								<Text style={styles.weekdayName}>{d}</Text>
+							{weekdays.map((day, index) => (
+								<Text key={index} style={styles.weekdayName}>
+									{day}
+								</Text>
 							))}
 
-							{weeks.map((week) => (
-								<View style={{ flexDirection: "row", width: "100%" }}>
-									{week.map((day) => {
+							{weeks.map((week, weekIndex) => (
+								<View key={weekIndex} style={{ flexDirection: "row", width: "100%" }}>
+									{week.map((day, dayIndex) => {
 										const dateId = `${selectedDate.year}-${String(displayedMonthNum + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 										const hasEntry = entries.some((e) => e.id === dateId);
 										const isSelected = selectedDate.month === displayedMonthNum && selectedDate.day === day;
@@ -90,6 +92,7 @@ export default function HomeScreen() {
 
 										return (
 											<TouchableOpacity
+												key={dayIndex}
 												disabled={checkInvalidDate}
 												style={[
 													styles.individualDate,
@@ -104,7 +107,9 @@ export default function HomeScreen() {
 														day: day ?? 0,
 													})
 												}>
-												<Text style={[styles.individualDateText, checkInvalidDate && styles.invalidDateText]}>{day}</Text>
+												<Text style={[styles.individualDateText, checkInvalidDate && styles.invalidDateText]}>
+													{day}
+												</Text>
 												{hasEntry && <View style={styles.dot} />}
 											</TouchableOpacity>
 										);
@@ -116,14 +121,14 @@ export default function HomeScreen() {
 
 					{selectedEntry ? (
 						<TouchableOpacity
-							style={styles.eventCard}
+							style={styles.entryCard}
 							onPress={() => router.push({ pathname: "/entry/[id]", params: { id: selectedEntry.id } })}>
 							<Text style={styles.emoji}>{selectedEntry.mood}</Text>
 							<View>
-								<Text style={styles.eventTime}>
+								<Text style={styles.entryTime}>
 									{selectedEntry.date} | {selectedEntry.dayTime}
 								</Text>
-								<Text style={styles.eventTitle} numberOfLines={1}>
+								<Text style={styles.entryTitle} numberOfLines={1}>
 									{((selectedEntry as any).text || "No description").slice(0, 30)}
 									...
 								</Text>
@@ -213,7 +218,7 @@ const styles = StyleSheet.create({
 		aspectRatio: 1,
 		marginBottom: 14
 	},
-	eventCard: {
+	entryCard: {
 		flexDirection: "row",
 		alignItems: "center",
 		backgroundColor: "#4548A6",
@@ -225,12 +230,12 @@ const styles = StyleSheet.create({
 		fontSize: 28,
 		marginRight: 12
 	},
-	eventTitle: {
+	entryTitle: {
 		color: "#fff",
 		fontWeight: "600",
 		fontSize: 16
 	},
-	eventTime: {
+	entryTime: {
 		color: "#ccc",
 		fontSize: 12,
 		marginTop: 2
