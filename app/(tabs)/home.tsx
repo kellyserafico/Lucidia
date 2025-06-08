@@ -129,7 +129,7 @@ export default function HomeScreen() {
 									{selectedEntry.date} | {selectedEntry.dayTime}
 								</Text>
 								<Text style={styles.entryTitle} numberOfLines={1}>
-									{((selectedEntry as any).text || "No description").slice(0, 30)}
+									{((selectedEntry).text || "No description").slice(0, 30)}
 									...
 								</Text>
 							</View>
