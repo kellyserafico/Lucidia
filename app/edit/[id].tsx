@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
-import { KeyboardAvoidingView, Platform, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useEntries } from "../contexts/EntriesContext";
 
 const moodOptions = ["😭", "☹️", "😐", "😊", "😁"];
@@ -37,20 +37,15 @@ export default function EditTextScreen() {
 				<TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
 					<Ionicons name="chevron-back" size={32} color="#fff" />
 				</TouchableOpacity>
-				<KeyboardAvoidingView
-					style={{ flex: 1 }}
-					behavior={Platform.OS === "ios" ? "padding" : undefined}
-					keyboardVerticalOffset={64}
-				>
-					<View style={styles.contentWrapper}>
+					<View style={styles.content}>
 						<Text style={styles.date}>{entry.date}</Text>
 						<Text style={styles.dayTime}>{entry.dayTime}</Text>
 
 						<Text style={styles.sectionTitle}>Mood</Text>
 						<View style={styles.emojiRow}>
-							{moodOptions.map((emoji) => (
+							{moodOptions.map((emoji, index) => (
 								<TouchableOpacity
-									key={emoji}
+									key={index}
 									onPress={() => setSelectedMood(emoji)}
 									style={[styles.emojiButton, selectedMood === emoji && styles.selectedEmoji]}
 								>
@@ -76,10 +71,10 @@ export default function EditTextScreen() {
 						</View>
 
 						<Text style={styles.sectionTitle}>Tags</Text>
-						<View style={styles.tagRow}>
-							{allTags.map((tag) => (
+						<View style={styles.tagsContainer}>
+							{allTags.map((tag, index) => (
 								<TouchableOpacity
-									key={tag}
+									key={index}
 									style={[styles.tag, selectedTags.includes(tag) && styles.selectedTag]}
 									onPress={() => toggleTag(tag)}
 								>
@@ -102,7 +97,6 @@ export default function EditTextScreen() {
 							<Text style={styles.nextBtnText}>Save & Back</Text>
 						</TouchableOpacity>
 					</View>
-				</KeyboardAvoidingView>
 			</SafeAreaView>
 		</LinearGradient>
 	);
@@ -115,7 +109,7 @@ const styles = StyleSheet.create({
 		top: 24,
 		zIndex: 10,
 	},
-	contentWrapper: {
+	content: {
 		marginTop: 70,
 		paddingHorizontal: 24,
 	},
@@ -165,7 +159,7 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		textAlignVertical: "top",
 	},
-	tagRow: {
+	tagsContainer: {
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: 8,

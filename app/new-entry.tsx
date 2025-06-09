@@ -103,7 +103,7 @@ export default function NewEntryScreen() {
 					</View>
 
 					<Text style={styles.sectionTitle}>Select Tags</Text>
-					<View style={styles.tagRow}>
+					<View style={styles.tagsContainer}>
 						{allTags.map((tag) => {
 							const selected = selectedTags.includes(tag);
 							return (
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		color: "#fff",
 	},
-	tagRow: {
+	tagsContainer: {
 		flexDirection: "row",
 		flexWrap: "wrap",
 		marginBottom: 16,
